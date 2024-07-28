@@ -28,6 +28,7 @@ public class TradeHistory {
     private Long activeInvestments;
     private Long profit;
     private Long price;
+    private Long count;
 
     @Enumerated(EnumType.STRING)
     private TradeType tradeType;
