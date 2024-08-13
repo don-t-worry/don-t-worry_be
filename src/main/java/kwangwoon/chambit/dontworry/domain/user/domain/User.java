@@ -17,6 +17,9 @@ public class User {
     private Long id;
 
     private String name;
+    private String username;
+    private String oauthName;
+    private String role;
 
     @Enumerated(EnumType.STRING)
     private HedgeType hedgeType;
