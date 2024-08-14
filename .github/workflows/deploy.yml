@@ -40,7 +40,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}:latest
+          tags: ${{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }}:latest
 
       - name: Application Run
         uses: appleboy/ssh-action@v1.0.3
@@ -51,9 +51,9 @@ jobs:
           script: |
             sudo docker kill ${{ secrets.PROJECT_NAME }}
             sudo docker rm -f ${{ secrets.PROJECT_NAME }}
-            sudo docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
-            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
+            sudo docker rmi ${{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }}
+            sudo docker pull ${{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }}
   
             sudo docker run -p "8080":"80" \
             --name ${{ secrets.PROJECT_NAME }} \
-            -d ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
+            -d ${{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }}
