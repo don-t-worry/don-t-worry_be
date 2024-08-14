@@ -35,10 +35,15 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: List directory contents
+        run: |
+          pwd
+          ls -la
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./docker
           push: true
           tags: ${{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }}:latest
 
