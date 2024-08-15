@@ -64,7 +64,7 @@ jobs:
         env: 
           PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
           IMAGE_USERNAME: ${{ secrets.IMAGE_USERNAME }}
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: "latest"
           
         with:
           envs: PROJECT_NAME, IMAGE_USERNAME, IMAGE_TAG
