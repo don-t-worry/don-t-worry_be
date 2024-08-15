@@ -46,10 +46,10 @@ jobs:
           ls -la
 
       - name: Docker Image Build
-        run: docker build -t {{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }} ./
+        run: docker build -t ${{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }} .
 
       - name: Docker Image Push
-        run: docker push {{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }}
+        run: docker push ${{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }}
       
       - name: List directory contents
         run: |
