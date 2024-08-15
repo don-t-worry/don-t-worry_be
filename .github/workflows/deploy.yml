@@ -45,13 +45,11 @@ jobs:
           cd build/libs
           ls -la
 
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: ./docker
-          push: true
-          tags: ${{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }}:latest
+      - name: Docker Image Build
+        run: docker build -t {{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }} .
 
+      - name: Docker Image Build
+        run: docker push {{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }}
       
       - name: List directory contents
         run: |
