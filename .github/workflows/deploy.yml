@@ -42,6 +42,8 @@ jobs:
         run: |
           pwd
           ls -la
+          cd build/libs
+          ls -la
 
       - name: Build and push
         uses: docker/build-push-action@v6
@@ -49,6 +51,14 @@ jobs:
           context: ./docker
           push: true
           tags: ${{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }}:latest
+
+      
+      - name: List directory contents
+        run: |
+          pwd
+          ls -la
+          cd build/libs
+          ls -la
 
       - name: Application Run
         uses: appleboy/ssh-action@v1.0.3
