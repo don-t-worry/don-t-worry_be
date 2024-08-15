@@ -61,16 +61,24 @@ jobs:
 
       - name: Application Run
         uses: appleboy/ssh-action@v1.0.3
+        env: 
+          PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+          IMAGE_USERNAME: ${{ secrets.IMAGE_USERNAME }}
+          IMAGE_TAG: ${{ github.sha }}
+          
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            sudo docker kill ${{ secrets.PROJECT_NAME }}
-            sudo docker rm -f ${{ secrets.PROJECT_NAME }}
-            sudo docker rmi ${{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }}
-            sudo docker pull ${{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }}
+            cd /home/ubuntu
+            chmod +x ./deploy.sh
+            ./deploy.sh
+            # sudo docker kill ${{ secrets.PROJECT_NAME }}
+            # sudo docker rm -f ${{ secrets.PROJECT_NAME }}
+            # sudo docker rmi ${{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }}
+            # sudo docker pull ${{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }}
   
-            sudo docker run -p "8080":"80" \
-            --name ${{ secrets.PROJECT_NAME }} \
-            -d ${{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }}
+            # sudo docker run -p "8080":"80" \
+            # --name ${{ secrets.PROJECT_NAME }} \
+            # -d ${{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }}
