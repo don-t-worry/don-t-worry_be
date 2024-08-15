@@ -67,6 +67,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
           
         with:
+          envs: PROJECT_NAME, IMAGE_USERNAME, IMAGE_TAG
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
