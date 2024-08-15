@@ -47,6 +47,7 @@ jobs:
 
       - name: Docker Image Build
         run: docker build -t ${{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }} ./docker
+        working-directory: /home/runner/work/don-t-worry_be/don-t-worry_be
 
       - name: Docker Image Push
         run: docker push ${{ secrets.IMAGE_USERNAME }}/${{ secrets.PROJECT_NAME }}
