@@ -31,14 +31,13 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String role = auth.getAuthority();
 
         String username = oauth2Client.getUsername();
-        String oauthName = oauth2Client.getName();
 
         if(oauth2Client.isExist()){
             TokenDto token = jwtUtil.createToken(username, role);
             response.addHeader("Authorization", token.getAccessToken());
             response.sendRedirect("http://localhost:3000");
         }else{
-            response.sendRedirect("http://localhost:3000?username="+username+"&oauthname="+oauthName);
+            response.sendRedirect("http://localhost:3000?username="+username);
         }
     }
 }

@@ -11,14 +11,12 @@ public class Oauth2ClientDto {
     private String username;
     private String role;
     private Boolean isExist;
-    private String oauthName;
 
 
     @Builder
-    public Oauth2ClientDto(String username, String role, Boolean isExist, String oauthName){
+    public Oauth2ClientDto(String username, String role, Boolean isExist){
         this.username = username;
         this.role = role;
         this.isExist = isExist;
-        this.oauthName = oauthName;
     }
 }

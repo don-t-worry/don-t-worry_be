@@ -33,16 +33,14 @@ public class Oauth2ClientService extends DefaultOAuth2UserService {
 
         String username = oauth2Response.getProvider() + "" + oauth2Response.getId();
 
-//        Oauth2ClientDto oauth2ClientDto = getOauthClientDto(username, oauth2Response.getName());
-        Oauth2ClientDto oauth2ClientDto = getOauthClientDto(username, "sdfsd");
+        Oauth2ClientDto oauth2ClientDto = getOauthClientDto(username);
 
         return new CustomOauth2ClientDto(oauth2ClientDto);
     }
 
-    private Oauth2ClientDto getOauthClientDto(String username, String oauthName) {
+    private Oauth2ClientDto getOauthClientDto(String username) {
         return userRepository.findByUsername(username)
                 .map(client -> Oauth2ClientDto.builder()
-                        .oauthName(client.getOauthName())
                         .role(client.getRole())
                         .username(client.getUsername())
                         .isExist(true)
@@ -50,7 +48,6 @@ public class Oauth2ClientService extends DefaultOAuth2UserService {
                 )
                 .orElseGet(() -> Oauth2ClientDto.builder()
                         .username(username)
-                        .oauthName(oauthName)
                         .isExist(false)
                         .role("ROLE_USER")
                         .build()
