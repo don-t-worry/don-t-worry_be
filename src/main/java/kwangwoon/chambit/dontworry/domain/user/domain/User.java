@@ -18,7 +18,6 @@ public class User {
 
     private String name;
     private String username;
-    private String oauthName;
     private String role;
 
     @Enumerated(EnumType.STRING)
