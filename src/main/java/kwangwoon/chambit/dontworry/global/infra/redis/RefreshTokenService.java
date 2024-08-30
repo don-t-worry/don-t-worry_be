@@ -21,6 +21,11 @@ public class RefreshTokenService {
         refreshTokenRepository.save(refreshToken);
     }
 
+    public RefreshToken getRefreshToken(String accessToken){
+        return refreshTokenRepository.findByAccessToken(accessToken)
+                .orElseThrow(() -> new IllegalArgumentException("there is no accessToken"));
+    }
+
     public RefreshToken findByUsername(String username){
         return refreshTokenRepository.findById(username)
                 .orElseThrow(() -> new IllegalArgumentException("there is no Id"));
