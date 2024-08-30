@@ -14,8 +14,8 @@ public class ResponseDto<T>{
     public ResponseDto(Integer status){
         this.status = status;
     }
-    public static ResponseDto<?> addStatus(Integer status){
-        return new ResponseDto<>(status);
+    public static ResponseDto<?> addStatus(Integer status, String message){
+        return new ResponseDto<>(status,message);
     }
     public static ResponseDto<?> success(){
         return new ResponseDto<>(200);
