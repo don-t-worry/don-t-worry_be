@@ -1,4 +1,4 @@
-package kwangwoon.chambit.dontworry.global.common;
+package kwangwoon.chambit.dontworry.global.common.api;
 
 import kwangwoon.chambit.dontworry.global.security.oauth.dto.CustomOauth2ClientDto;
 import org.springframework.security.core.Authentication;
