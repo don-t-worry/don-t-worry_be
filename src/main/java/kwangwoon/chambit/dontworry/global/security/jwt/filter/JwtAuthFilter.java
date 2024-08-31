@@ -28,7 +28,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final RefreshTokenService refreshTokenService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, IllegalArgumentException {
         String accessToken = request.getHeader("Authorization");
 
         if(!StringUtils.hasText(accessToken)){
@@ -37,8 +37,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
         // 토큰이 없는 부분을 처리하는 로직
 
-        if(!jwtUtil.validateToken(accessToken)){
+        if(request.getRequestURI().equals("/refresh")){
+            doFilter(request, response, filterChain);
+            return;
+        }
+        //refresh를 처리하는 로직
 
+        if(!jwtUtil.validateToken(accessToken)){
             RefreshToken refreshToken = refreshTokenService.getRefreshToken(accessToken);
 
             if(jwtUtil.validateToken(refreshToken.getRefreshToken())){
