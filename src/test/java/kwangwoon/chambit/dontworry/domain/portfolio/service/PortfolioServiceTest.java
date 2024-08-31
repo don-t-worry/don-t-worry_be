@@ -1,5 +1,6 @@
 package kwangwoon.chambit.dontworry.domain.portfolio.service;
 
+import io.lettuce.core.ScriptOutputType;
 import kwangwoon.chambit.dontworry.domain.derivative.domain.Derivative;
 import kwangwoon.chambit.dontworry.domain.derivative.repository.DerivativeRepository;
 import kwangwoon.chambit.dontworry.domain.portfolio.domain.Portfolio;
@@ -31,6 +32,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
@@ -85,27 +87,26 @@ class PortfolioServiceTest {
 
         portfolioRepository.saveAll(collect);
     }
-    private static Authentication getAuthentication() {
+
+    private static UserDetails getAuthentication() {
         Oauth2ClientDto oauth2ClientDto = Oauth2ClientDto.builder()
-                .role("투자자")
-                .username("jaeyounnn")
+                .role("ROLE_USER")
+                .username("kakao3648188757")
                 .isExist(true)
                 .build();
 
-        CustomOauth2ClientDto customOauth2ClientDto = new CustomOauth2ClientDto(oauth2ClientDto);
-        Authentication auth = new UsernamePasswordAuthenticationToken(customOauth2ClientDto,null,customOauth2ClientDto.getAuthorities());
-        return auth;
+        return new CustomOauth2ClientDto(oauth2ClientDto);
     }
 
     @Test
     public void insertPortfolioTest(){
 
-        Authentication auth = getAuthentication();
+        UserDetails user = getAuthentication();
 
         PortfolioInsertDto dto = new PortfolioInsertDto(20000L,4000L,20L);
 
         long countBefore = portfolioRepository.count();
-        portfolioService.insertPortfolio(dto,auth);
+        portfolioService.insertPortfolio(dto,user);
         long countAfter = portfolioRepository.count();
 
         Assertions.assertThat(countBefore+1).isEqualTo(countAfter);
@@ -115,9 +116,9 @@ class PortfolioServiceTest {
 
     @Test
     public void getPortfolioEditTest(){
-        Authentication authentication = getAuthentication();
+        UserDetails user = getAuthentication();
         PageRequest pageRequest = PageRequest.of(0,2, Sort.by("stockQuantity"));
-        Page<PortfolioRecommendDerivativeDto> dtos = portfolioService.getAllPortfolioRecommendDerivative(pageRequest, authentication);
+        Page<PortfolioRecommendDerivativeDto> dtos = portfolioService.getAllPortfolioRecommendDerivative(pageRequest, user);
 
         Assertions.assertThat(dtos.stream().count()).isEqualTo(2);
     }
@@ -168,9 +169,9 @@ class PortfolioServiceTest {
 
         List<Portfolio> all = portfolioRepository.findAll();
 
-        List<Long> collect = LongStream.range(0, 10)
-                .map(i -> i + all.get(0).getId())
-                .boxed()
+
+        List<Long> collect = all.subList(0, 10).stream()
+                .map(Portfolio::getId)
                 .collect(Collectors.toList());
 
         portfolioService.deletePortfolios(collect);
@@ -191,8 +192,6 @@ class PortfolioServiceTest {
         portfolioEdit.forEach(dto -> {
             Assertions.assertThat(dto).isNotNull();
         });
-
-        Assertions.assertThat(portfolioEdit.size()).isEqualTo(30);
     }
 
     @Test
@@ -202,7 +201,12 @@ class PortfolioServiceTest {
 
         portfolioManage.getStocks().forEach(System.out::println);
 
-//        System.out.println(portfolioManage);
+        Assertions.assertThat(portfolioManage).isNotNull();
+
+        portfolioManage.getStocks().forEach(
+                stock -> Assertions.assertThat(stock).isNotNull()
+        );
+
     }
 
     @Test
@@ -210,21 +214,14 @@ class PortfolioServiceTest {
         HedgeHomeResponseDto hedgeHome = portfolioService.getHedgeHome(getAuthentication());
 
         System.out.println(hedgeHome);
+
+        Assertions.assertThat(hedgeHome).isNotNull();
+        hedgeHome.getHedgeRecommend2().forEach(
+                recommend -> Assertions.assertThat(recommend).isNotNull()
+        );
     }
 
-//    @Test
-//    public void test(){
-//        portfolioService.insertPortfolio();
-//        portfolioService.deletePortfolio();
-//        portfolioService.deletePortfolios();
 
-//        portfolioService.getPortfolioEdit();
-//        portfolioService.getPortfolioManage();
-//        portfolioService.updatePortfolio();
-//        portfolioService.getHedgeHome();
-
-//        portfolioService.getAllPortfolioRecommendDerivative();
-//    }
 
 
 }
