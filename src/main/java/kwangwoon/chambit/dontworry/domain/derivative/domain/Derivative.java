@@ -3,10 +3,7 @@ package kwangwoon.chambit.dontworry.domain.derivative.domain;
 import jakarta.persistence.*;
 import kwangwoon.chambit.dontworry.domain.derivative.enums.OptionType;
 import kwangwoon.chambit.dontworry.domain.stock.domain.Stock;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -30,4 +27,12 @@ public class Derivative {
     @JoinColumn(name = "stock_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Stock stock;
+
+    @Builder
+    public Derivative(String derivativeCode, String derivativeName, OptionType optionType, Stock stock){
+        this.derivativeCode = derivativeCode;
+        this.derivativeName = derivativeName;
+        this.optionType =optionType;
+        this.stock = stock;
+    }
 }

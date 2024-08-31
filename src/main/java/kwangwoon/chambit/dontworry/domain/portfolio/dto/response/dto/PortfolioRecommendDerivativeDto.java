@@ -1,6 +1,7 @@
 package kwangwoon.chambit.dontworry.domain.portfolio.dto.response.dto;
 
 import kwangwoon.chambit.dontworry.domain.portfolio.domain.Portfolio;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -12,6 +13,7 @@ public class PortfolioRecommendDerivativeDto {
     private Long riskReductionRate;
     private String stockImageUrl;
 
+    @Builder
     public PortfolioRecommendDerivativeDto(Portfolio portfolio){
         this.derivativeName = portfolio.getDerivative().getDerivativeName();
         this.derivativeCode = portfolio.getDerivative().getDerivativeCode();
