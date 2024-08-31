@@ -1,5 +1,6 @@
 package kwangwoon.chambit.dontworry.global.common.service;
 
+import io.jsonwebtoken.JwtException;
 import kwangwoon.chambit.dontworry.global.infra.redis.RefreshToken;
 import kwangwoon.chambit.dontworry.global.infra.redis.RefreshTokenService;
 import kwangwoon.chambit.dontworry.global.security.jwt.dto.TokenDto;
@@ -15,6 +16,11 @@ public class TokenService {
 
     public String updateToken(String accessToken){
         RefreshToken refreshToken = refreshTokenService.getRefreshToken(accessToken);
+
+
+        if(!jwtUtil.validateToken(refreshToken.getRefreshToken())){
+            throw new JwtException("Refresh Token 만료");
+        }
 
         String role = jwtUtil.getRole(refreshToken.getRefreshToken());
         String username = jwtUtil.getUsername(refreshToken.getRefreshToken());
