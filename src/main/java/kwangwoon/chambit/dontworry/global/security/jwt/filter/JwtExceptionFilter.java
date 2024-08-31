@@ -6,8 +6,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import kwangwoon.chambit.dontworry.global.common.dto.ErrorResponse;
-import kwangwoon.chambit.dontworry.global.common.dto.ResponseDto;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

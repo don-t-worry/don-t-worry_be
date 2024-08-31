@@ -2,6 +2,7 @@ package kwangwoon.chambit.dontworry.global.security.oauth.dto;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.Collection;
 import java.util.Map;
 
 @RequiredArgsConstructor
-public class CustomOauth2ClientDto implements OAuth2User {
+public class CustomOauth2ClientDto implements OAuth2User, UserDetails {
 
     private final Oauth2ClientDto oauth2ClientDto;
 
@@ -30,6 +31,11 @@ public class CustomOauth2ClientDto implements OAuth2User {
         });
 
         return collection;
+    }
+
+    @Override
+    public String getPassword() {
+        return "";
     }
 
     @Override

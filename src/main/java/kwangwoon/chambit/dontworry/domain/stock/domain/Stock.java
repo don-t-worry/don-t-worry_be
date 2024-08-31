@@ -2,10 +2,7 @@ package kwangwoon.chambit.dontworry.domain.stock.domain;
 
 import jakarta.persistence.*;
 import kwangwoon.chambit.dontworry.domain.derivative.domain.Derivative;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -23,9 +20,12 @@ public class Stock {
     private Long volatility;
     private String imageUrl;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "derivative_id")
-    @OnDelete(action = OnDeleteAction.SET_NULL)
-    private Derivative derivative;
+    @Builder
+    public Stock(String stockCode, String stockName, Long volatility, String imageUrl){
+        this.stockCode = stockCode;
+        this.stockName = stockName;
+        this.volatility = volatility;
+        this.imageUrl = imageUrl;
+    }
 
 }
