@@ -84,8 +84,8 @@ class UserServiceTest {
         CustomOauth2ClientDto customOauth2ClientDto = new CustomOauth2ClientDto(oauth2ClientDto);
 
 
-        userService.updateName("신건", new UsernamePasswordAuthenticationToken(customOauth2ClientDto,null,customOauth2ClientDto.getAuthorities()));
-        userService.updateHedgeType(HedgeType.BALANCED, new UsernamePasswordAuthenticationToken(customOauth2ClientDto,null,customOauth2ClientDto.getAuthorities()));
+        userService.updateName("신건", customOauth2ClientDto);
+        userService.updateHedgeType(HedgeType.BALANCED, customOauth2ClientDto);
 
         em.flush();
         em.clear();
