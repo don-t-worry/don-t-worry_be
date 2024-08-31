@@ -1,9 +1,9 @@
 package kwangwoon.chambit.dontworry.global.config;
 
 public enum DomainConfig {
-    LocalHttp("http://localhost:3000"),
-    LocalHttps("https://localhost:3000"),
-    FrontServer("https://www.don-t-worry.com");
+    LocalHttp("http://localhost:3000/"),
+    LocalHttps("https://localhost:3000/"),
+    FrontServer("https://www.don-t-worry.com/");
 
     private final String address;
 
@@ -12,6 +12,6 @@ public enum DomainConfig {
     }
 
     public String getPresentAddress(){
-        return LocalHttp.address;
+        return LocalHttps.address;
     }
 }
