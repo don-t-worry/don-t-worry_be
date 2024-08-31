@@ -23,12 +23,12 @@ public class RefreshTokenService {
 
     public RefreshToken getRefreshToken(String accessToken){
         return refreshTokenRepository.findByAccessToken(accessToken)
-                .orElseThrow(() -> new IllegalArgumentException("there is no accessToken"));
+                .orElseThrow(() -> new IllegalArgumentException("AccessToken 존재하지 않음"));
     }
 
     public RefreshToken findByUsername(String username){
         return refreshTokenRepository.findById(username)
-                .orElseThrow(() -> new IllegalArgumentException("there is no Id"));
+                .orElseThrow(() -> new IllegalArgumentException("Username 존재하지 않음"));
     }
 
     public void delete(String username){
@@ -37,7 +37,7 @@ public class RefreshTokenService {
 
     public void updateAccessToken(String username, String accessToken){
         RefreshToken refreshToken = refreshTokenRepository.findById(username)
-                .orElseThrow(() -> new IllegalArgumentException("there is no Id"));
+                .orElseThrow(() -> new IllegalArgumentException("Username 존재하지 않음"));
 
         refreshToken.updateAccessToken(accessToken);
     }
