@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
@@ -39,8 +40,7 @@ public class PortfolioService {
     private final StockRepository stockRepository;
 
     // 추천 헷지상품 목록(2개랑, 모든 리스트)
-    public Page<PortfolioRecommendDerivativeDto> getAllPortfolioRecommendDerivative(Pageable pageable, Authentication authentication){
-        CustomOauth2ClientDto principal = (CustomOauth2ClientDto) authentication.getPrincipal();
+    public Page<PortfolioRecommendDerivativeDto> getAllPortfolioRecommendDerivative(Pageable pageable, UserDetails principal){
         String username = principal.getUsername();
 
         return portfolioRepository.findByUsernameAllDerivative(username,pageable)
@@ -49,8 +49,7 @@ public class PortfolioService {
 
 
 
-    public HedgeHomeResponseDto getHedgeHome(Authentication authentication){
-        CustomOauth2ClientDto principal = (CustomOauth2ClientDto) authentication.getPrincipal();
+    public HedgeHomeResponseDto getHedgeHome(UserDetails principal){
         String username = principal.getUsername();
 
         PageRequest pageRequest = PageRequest.of(0,2, Sort.by("stockQuantity").descending());
@@ -62,8 +61,7 @@ public class PortfolioService {
         return new HedgeHomeResponseDto(name,pieChart,hedgeRecommend2);
     }
 
-    public PortfolioManageResponseDto getPortfolioManage(Authentication authentication){
-        CustomOauth2ClientDto principal = (CustomOauth2ClientDto) authentication.getPrincipal();
+    public PortfolioManageResponseDto getPortfolioManage(UserDetails principal){
         String username = principal.getUsername();
 
         String name = userRepository.findByUsername(username).get().getName();
@@ -76,8 +74,7 @@ public class PortfolioService {
     }
 
     @Transactional
-    public void insertPortfolio(PortfolioInsertDto portfolioInsertDto, Authentication authentication){
-        CustomOauth2ClientDto principal = (CustomOauth2ClientDto) authentication.getPrincipal();
+    public void insertPortfolio(PortfolioInsertDto portfolioInsertDto, UserDetails principal){
         String username = principal.getUsername();
         User user = userRepository.findByUsername(username).get();
 
@@ -107,8 +104,7 @@ public class PortfolioService {
         portfolioRepository.deleteById(portfolioId);
     }
 
-    public List<PortfolioEditResponseDto> getPortfolioEdit(Authentication authentication){
-        CustomOauth2ClientDto principal = (CustomOauth2ClientDto) authentication.getPrincipal();
+    public List<PortfolioEditResponseDto> getPortfolioEdit(UserDetails principal){
         String username = principal.getUsername();
 
         List<Portfolio> portfolios = portfolioRepository.findByStockAllPrices(username);
