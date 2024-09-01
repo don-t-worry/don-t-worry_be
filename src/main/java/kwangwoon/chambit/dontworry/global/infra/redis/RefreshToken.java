@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
 
-@RedisHash(timeToLive = 3600)
+@RedisHash(value = "refreshToken", timeToLive = 3600)
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor

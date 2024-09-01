@@ -22,6 +22,21 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(UserSignUpDto userSignUpDto){
         userService.signUp(userSignUpDto);
+
+//        // 리다이렉션할 URL
+//        String redirectUrl = "/welcome";
+//
+//        // 응답 헤더 설정
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Custom-Header", "HeaderValue"); // 추가 헤더 설정
+//        headers.add(HttpHeaders.LOCATION, redirectUrl); // 리다이렉션 URL 설정
+//
+//        // ResponseEntity를 사용하여 상태 코드와 헤더 설정
+//        return ResponseEntity
+//                .status(HttpStatus.FOUND) // 302 Found 상태 코드로 리다이렉션
+//                .headers(headers)         // 설정한 헤더 추가
+//                .body(ResponseDto.success("Redirecting...")); // 본문 설정 (선택적)
+//    }
         return ResponseEntity.ok("success");
     }
 
