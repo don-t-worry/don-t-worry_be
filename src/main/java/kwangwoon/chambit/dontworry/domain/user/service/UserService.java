@@ -8,6 +8,7 @@ import kwangwoon.chambit.dontworry.domain.user.repository.UserRepository;
 import kwangwoon.chambit.dontworry.global.security.oauth.dto.CustomOauth2ClientDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,8 +36,7 @@ public class UserService {
     }
 
     @Transactional
-    public void updateName(String updateName, Authentication authentication){
-        CustomOauth2ClientDto principal = (CustomOauth2ClientDto) authentication.getPrincipal();
+    public void updateName(String updateName, UserDetails principal){
         String username = principal.getUsername();
 
         User user = userRepository.findByUsername(username).get();
@@ -44,8 +44,7 @@ public class UserService {
     }
 
     @Transactional
-    public void updateHedgeType(HedgeType updateHedge, Authentication authentication){
-        CustomOauth2ClientDto principal = (CustomOauth2ClientDto) authentication.getPrincipal();
+    public void updateHedgeType(HedgeType updateHedge, UserDetails principal){
         String username = principal.getUsername();
 
         User user = userRepository.findByUsername(username).get();

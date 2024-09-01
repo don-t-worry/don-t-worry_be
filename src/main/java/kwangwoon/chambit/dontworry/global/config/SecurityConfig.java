@@ -19,6 +19,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import java.util.Collections;
 import java.util.List;
 
+import static kwangwoon.chambit.dontworry.global.config.DomainConfig.FrontServer;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -51,7 +53,7 @@ public class SecurityConfig {
 
         http.
                 authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/", "/signup","/swagger-ui/**" ,"/v3/api-docs/**").permitAll()
+                        .requestMatchers("/refresh","/login", "/", "/signup","/swagger-ui/**" ,"/v3/api-docs/**").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/hello").hasRole("USER")
                         //.anyRequest().authenticated()
@@ -67,7 +69,7 @@ public class SecurityConfig {
 
                     CorsConfiguration configuration = new CorsConfiguration();
 
-                    configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+                    configuration.setAllowedOrigins(List.of(FrontServer.getPresentAddress()));
                     configuration.setAllowedMethods(Collections.singletonList("*")); // 모든 요청 허용
                     configuration.setAllowCredentials(true);
                     configuration.setAllowedHeaders(Collections.singletonList("*"));
