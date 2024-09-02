@@ -3,6 +3,8 @@ package kwangwoon.chambit.dontworry.domain.user.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kwangwoon.chambit.dontworry.domain.user.domain.User;
+import kwangwoon.chambit.dontworry.domain.user.dto.request.UserHedgeTypeUpdateDto;
+import kwangwoon.chambit.dontworry.domain.user.dto.request.UserNameUpdateDto;
 import kwangwoon.chambit.dontworry.domain.user.dto.request.UserSignUpDto;
 import kwangwoon.chambit.dontworry.domain.user.enums.HedgeType;
 import kwangwoon.chambit.dontworry.domain.user.service.UserService;
@@ -48,16 +50,16 @@ public class UserController {
     }
 
     @Operation(summary = "유저의 닉네임 업데이트", description = "토큰 정보 필요함")
-    @PutMapping("/user/update/name")
-    public ResponseEntity<?> updateName(@RequestBody String updateName, @AuthenticationPrincipal UserDetails user){
-        userService.updateName(updateName, user);
+    @PutMapping("/user/name")
+    public ResponseEntity<?> updateName(@RequestBody UserNameUpdateDto userNameUpdateDto, @AuthenticationPrincipal UserDetails user){
+        userService.updateName(userNameUpdateDto.getName(), user);
         return ResponseEntity.ok("success");
     }
 
     @Operation(summary = "유저의 헷지타입 업데이트", description = "토큰 정보 필요함")
-    @PutMapping("/user/update/hedgetype")
-    public ResponseEntity<?> updateHedgeType(@RequestBody HedgeType hedgeType, @AuthenticationPrincipal UserDetails user){
-        userService.updateHedgeType(hedgeType, user);
+    @PutMapping("/user/hedgetype")
+    public ResponseEntity<?> updateHedgeType(@RequestBody UserHedgeTypeUpdateDto userHedgeTypeUpdateDto, @AuthenticationPrincipal UserDetails user){
+        userService.updateHedgeType(userHedgeTypeUpdateDto.getHedgeType(), user);
         return ResponseEntity.ok("success");
     }
 }
