@@ -11,10 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +24,7 @@ public class UserController {
 
     @Operation(summary = "회원가입", description = "회원가입 성공시 바로 토큰 정보 헤더에 담아서 return함")
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(UserSignUpDto userSignUpDto){
+    public ResponseEntity<?> signUp(@RequestBody UserSignUpDto userSignUpDto){
         User user = userService.signUp(userSignUpDto);
 
         String token = userService.getToken(user.getUsername(), user.getRole());
@@ -49,14 +46,14 @@ public class UserController {
 
     @Operation(summary = "유저의 닉네임 업데이트", description = "토큰 정보 필요함")
     @PutMapping("/user/update/name")
-    public ResponseEntity<?> updateName(String username, @AuthenticationPrincipal UserDetails user){
-        userService.updateName(username, user);
+    public ResponseEntity<?> updateName(@RequestBody String updateName, @AuthenticationPrincipal UserDetails user){
+        userService.updateName(updateName, user);
         return ResponseEntity.ok("success");
     }
 
     @Operation(summary = "유저의 헷지타입 업데이트", description = "토큰 정보 필요함")
     @PutMapping("/user/update/hedgetype")
-    public ResponseEntity<?> updateHedgeType(HedgeType hedgeType, @AuthenticationPrincipal UserDetails user){
+    public ResponseEntity<?> updateHedgeType(@RequestBody HedgeType hedgeType, @AuthenticationPrincipal UserDetails user){
         userService.updateHedgeType(hedgeType, user);
         return ResponseEntity.ok("success");
     }

@@ -22,8 +22,7 @@ import java.util.List;
 @Tag(name = "포트폴리오 api")
 public class PortfolioController {
 
-    @Autowired
-    private PortfolioService portfolioService;
+    private final PortfolioService portfolioService;
 
     @GetMapping("/hedgehome")
     @Operation(summary = "헷지 home 화면", description = "토큰 정보 필요함, pie chart에 대한 정보와, 헷지 추천 상품 보여줌")
@@ -73,7 +72,7 @@ public class PortfolioController {
 
     @DeleteMapping()
     @Operation(summary = "포트폴리오 삭제")
-    public ResponseEntity<?> deletePortfolio(@RequestParam List<Long> portfolioIds){
+    public ResponseEntity<?> deletePortfolio(@RequestBody List<Long> portfolioIds){
         portfolioService.deletePortfolios(portfolioIds);
         return ResponseEntity.ok("success");
     }
