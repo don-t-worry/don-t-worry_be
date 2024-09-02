@@ -9,13 +9,13 @@ import java.util.List;
 
 @Data
 public class PortfolioManageResponseDto {
-    private String name;
+
     private List<PortfolioPieDto> pieChart;
     private List<PortfolioElementDto> stocks;
 
     @Builder
-    public PortfolioManageResponseDto(String name, List<PortfolioPieDto> pieChart, List<PortfolioElementDto> stocks){
-        this.name = name;
+    public PortfolioManageResponseDto(List<PortfolioPieDto> pieChart, List<PortfolioElementDto> stocks){
+
         this.pieChart = pieChart;
         this.stocks = stocks;
     }
