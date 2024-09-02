@@ -31,11 +31,17 @@ public class PortfolioController {
         return ResponseEntity.ok(portfolioService.getHedgeHome(userDetails));
     }
 
+//    @GetMapping("/recommend/hedgeall")
+//    @Operation(summary = "헷지 상품 추천 화면", description = "무한 스크롤을 위해 page 입력받음")
+//    public ResponseEntity<?> getRecommend(@RequestParam("page") int page, @AuthenticationPrincipal UserDetails userDetails){
+//        PageRequest pageRequest = PageRequest.of(page,10, Sort.by("stockQuantity").descending());
+//        return ResponseEntity.ok(portfolioService.getAllPortfolioRecommendDerivative(pageRequest,userDetails));
+//    }
+
     @GetMapping("/recommend/hedgeall")
     @Operation(summary = "헷지 상품 추천 화면", description = "무한 스크롤을 위해 page 입력받음")
-    public ResponseEntity<?> getRecommend(@RequestParam("page") int page, @AuthenticationPrincipal UserDetails userDetails){
-        PageRequest pageRequest = PageRequest.of(page,10, Sort.by("stockQuantity").descending());
-        return ResponseEntity.ok(portfolioService.getAllPortfolioRecommendDerivative(pageRequest,userDetails));
+    public ResponseEntity<?> getRecommend(@AuthenticationPrincipal UserDetails userDetails){
+        return ResponseEntity.ok(portfolioService.getAllPortfolioRecommendDerivative(userDetails));
     }
 
     @GetMapping("/edit")

@@ -47,6 +47,14 @@ public class PortfolioService {
                 .map(PortfolioRecommendDerivativeDto::new);
     }
 
+    public List<PortfolioRecommendDerivativeDto> getAllPortfolioRecommendDerivative(UserDetails principal){
+        String username = principal.getUsername();
+        return portfolioRepository.findByUsernameAllDerivative(username)
+                .stream()
+                .map(PortfolioRecommendDerivativeDto::new)
+                .collect(Collectors.toList());
+    }
+
 
 
     public HedgeHomeResponseDto getHedgeHome(UserDetails principal){
@@ -58,19 +66,13 @@ public class PortfolioService {
         List<PortfolioPieDto> pieChart = getPortfolioPie(username);
         String name = userRepository.findByUsername(username).get().getName();
 
-        return new HedgeHomeResponseDto(name,pieChart,hedgeRecommend2);
+        return new HedgeHomeResponseDto(pieChart,hedgeRecommend2);
     }
 
     public PortfolioManageResponseDto getPortfolioManage(UserDetails principal){
         String username = principal.getUsername();
 
-        String name = userRepository.findByUsername(username).get().getName();
-
-        PortfolioManageResponseDto portfolioInfo = getPortfolioInfo(username);
-
-        portfolioInfo.setName(name);
-
-        return portfolioInfo;
+        return getPortfolioInfo(username);
     }
 
     @Transactional
