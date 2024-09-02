@@ -140,7 +140,6 @@ public class PortfolioService {
                     long amount = x.getPresentPrice() * x.getStockQuantity();
                     float rate = (float) amount / sum;
 
-                    System.out.println(x.getStockName());
 
                     if (rate < 0.01) {
                         return new PortfolioPieDto("기타", rate);

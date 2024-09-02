@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Tag(name = "token api")
+@Tag(name = "토큰 api")
 @RequiredArgsConstructor
 public class TokenController {
 
