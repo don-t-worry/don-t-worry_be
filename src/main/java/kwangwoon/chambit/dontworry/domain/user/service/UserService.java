@@ -5,6 +5,8 @@ import kwangwoon.chambit.dontworry.domain.user.dto.request.UserSignUpDto;
 import kwangwoon.chambit.dontworry.domain.user.dto.response.HedgeResponseDto;
 import kwangwoon.chambit.dontworry.domain.user.enums.HedgeType;
 import kwangwoon.chambit.dontworry.domain.user.repository.UserRepository;
+import kwangwoon.chambit.dontworry.global.security.jwt.dto.TokenDto;
+import kwangwoon.chambit.dontworry.global.security.jwt.util.JWTUtil;
 import kwangwoon.chambit.dontworry.global.security.oauth.dto.CustomOauth2ClientDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -22,11 +24,17 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
+    private final JWTUtil jwtUtil;
 
     @Transactional
-    public void signUp(UserSignUpDto userSignUpDto){
+    public User signUp(UserSignUpDto userSignUpDto){
         User user = userSignUpDto.toUser();
-        userRepository.save(user);
+        return userRepository.save(user);
+    }
+
+    public String getToken(String username, String role){
+        TokenDto token = jwtUtil.createToken(username, role);
+        return token.getAccessToken();
     }
 
     public List<HedgeResponseDto> getHedgeTypeList(){
