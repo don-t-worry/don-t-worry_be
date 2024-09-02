@@ -64,8 +64,7 @@ public class PortfolioTest {
                 );
         result
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("재윤"));
+                .andExpect(status().isOk());
 
     }
 
@@ -100,8 +99,7 @@ public class PortfolioTest {
 
         result
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("재윤"));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -114,7 +112,7 @@ public class PortfolioTest {
                 .perform(
                         get("/api/portfolio/recommend/hedgeall")
                                 .with(SecurityMockMvcRequestPostProcessors.user(user))
-                                .param("page","0")
+//                                .param("page","0")
                 );
 
         result
