@@ -20,7 +20,7 @@ public class StockController {
     private final StockService stockService;
 
     @GetMapping("/search")
-    @Operation(summary = "주식 검색 api", description = "무한 스크롤을 위해 page입력 받음")
+    @Operation(summary = "주식 검색 api", description = "10개 씩 출력함. 무한 스크롤을 위해 page입력 받음")
     public ResponseEntity<?> getStockSearchPage(@RequestParam("searchKeyword") String searchKeyword,@RequestParam("page") int page){
         PageRequest pr = PageRequest.of(page,10, Sort.by("stockName"));
         return ResponseEntity.ok(stockService.getSearchStock(searchKeyword, pr));

@@ -22,12 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
 
-    @Operation(summary = "회원가입")
+    @Operation(summary = "회원가입", description = "회원가입 성공시 바로 토큰 정보 헤더에 담아서 return함")
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(UserSignUpDto userSignUpDto){
         User user = userService.signUp(userSignUpDto);
-
-        System.out.println(user.getUsername() +" " + user.getRole());
 
         String token = userService.getToken(user.getUsername(), user.getRole());
 
@@ -43,14 +41,14 @@ public class UserController {
         return ResponseEntity.ok(userService.getHedgeTypeList());
     }
 
-    @Operation(summary = "유저의 닉네임 업데이트")
+    @Operation(summary = "유저의 닉네임 업데이트", description = "토큰 정보 필요함")
     @PutMapping("/user/update/name")
     public ResponseEntity<?> updateName(String username, @AuthenticationPrincipal UserDetails user){
         userService.updateName(username, user);
         return ResponseEntity.ok("success");
     }
 
-    @Operation(summary = "유저의 헷지타입 업데이트")
+    @Operation(summary = "유저의 헷지타입 업데이트", description = "토큰 정보 필요함")
     @PutMapping("/user/update/hedgetype")
     public ResponseEntity<?> updateHedgeType(HedgeType hedgeType, @AuthenticationPrincipal UserDetails user){
         userService.updateHedgeType(hedgeType, user);
