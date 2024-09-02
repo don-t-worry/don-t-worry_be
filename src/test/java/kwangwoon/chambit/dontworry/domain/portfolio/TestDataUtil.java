@@ -37,19 +37,24 @@ public class TestDataUtil {
         user = userRepository.findByUsername("kakao3648188757").get();
     }
 
-
-    public static Result getPageDerivative() {
-        List<PortfolioRecommendDerivativeDto> list = getPortfolios().stream()
+    public static List<PortfolioRecommendDerivativeDto> getPageDerivative() {
+        return getPortfolios().stream()
                 .map(PortfolioRecommendDerivativeDto::new)
                 .collect(Collectors.toList());
-
-        PageRequest pageRequest = PageRequest.of(0,5, Sort.by("stockQuantity").descending());
-
-
-        Page<PortfolioRecommendDerivativeDto> dtos = new PageImpl<>(list,pageRequest,list.size());
-        Result result = new Result(pageRequest, dtos);
-        return result;
     }
+
+//    public static Result getPageDerivative() {
+//        List<PortfolioRecommendDerivativeDto> list = getPortfolios().stream()
+//                .map(PortfolioRecommendDerivativeDto::new)
+//                .collect(Collectors.toList());
+//
+//        PageRequest pageRequest = PageRequest.of(0,10, Sort.by("stockQuantity").descending());
+//
+//
+//        Page<PortfolioRecommendDerivativeDto> dtos = new PageImpl<>(list,pageRequest,list.size());
+//        Result result = new Result(pageRequest, dtos);
+//        return result;
+//    }
 
     public record Result(PageRequest pageRequest, Page<PortfolioRecommendDerivativeDto> dtos) {
     }
@@ -82,7 +87,6 @@ public class TestDataUtil {
         List<PortfolioElementDto> portfolioElementDtos = getPortfolioElementDtos();
 
         PortfolioManageResponseDto portfolioManageDto = PortfolioManageResponseDto.builder()
-                .name("재윤")
                 .stocks(portfolioElementDtos)
                 .pieChart(getPortfolioPieDtos())
                 .build();
@@ -155,7 +159,6 @@ public class TestDataUtil {
 
 
         HedgeHomeResponseDto hedgeHomeResponseDto = HedgeHomeResponseDto.builder()
-                .name("재윤")
                 .hedgeRecommend2(derivativeDtos)
                 .pieChart(pieDtos)
                 .build();
