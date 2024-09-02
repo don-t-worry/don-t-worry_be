@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "유저 api")
@@ -32,7 +35,10 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION,token);
 
-        return ResponseEntity.ok().headers(headers).body("success");
+        Map<String,String> body = new HashMap<>();
+        body.put("name",user.getName());
+
+        return ResponseEntity.ok().headers(headers).body(body);
     }
 
     @Operation(summary = "헷지 타입 리스트 출력")
