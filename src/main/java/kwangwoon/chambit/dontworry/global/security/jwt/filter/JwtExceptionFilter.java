@@ -28,10 +28,18 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         try{
             filterChain.doFilter(request, response);
         } catch (JwtException e){
-            response.setStatus(400);
+
+            int status = 0;
+            if(e.getMessage().contains("Access")){
+                status = 401;
+            }else{
+                status = 402;
+            }
+
+            response.setStatus(status);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("UTF-8");
-            objectMapper.writeValue(response.getWriter(), ErrorResponse.builder().status(400).value(e.getMessage()).build());
+            objectMapper.writeValue(response.getWriter(), ErrorResponse.builder().status(status).value(e.getMessage()).build());
             // json으로 변환하여 출력대상에 쓰임
             // 첫번째 인자는 출력대상 목적지, 두번째는 json으로 변환되는 객체
             // 여기서는 http의 목적지, 이때 목적지에 값들을 바꾼게 위의 설정들임

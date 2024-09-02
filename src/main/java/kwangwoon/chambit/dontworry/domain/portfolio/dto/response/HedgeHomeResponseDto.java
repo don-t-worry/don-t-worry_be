@@ -9,13 +9,11 @@ import java.util.List;
 
 @Data
 public class HedgeHomeResponseDto {
-    private String name;
     private List<PortfolioPieDto> pieChart;
     private List<PortfolioRecommendDerivativeDto> hedgeRecommend2;
 
     @Builder
-    public HedgeHomeResponseDto(String name, List<PortfolioPieDto> pieChart, List<PortfolioRecommendDerivativeDto> hedgeRecommend2){
-        this.name = name;
+    public HedgeHomeResponseDto(List<PortfolioPieDto> pieChart, List<PortfolioRecommendDerivativeDto> hedgeRecommend2){
         this.pieChart = pieChart;
         this.hedgeRecommend2 = hedgeRecommend2;
     }

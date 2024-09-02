@@ -3,6 +3,7 @@ package kwangwoon.chambit.dontworry.domain.portfolio.api;
 import kwangwoon.chambit.dontworry.domain.portfolio.dto.response.HedgeHomeResponseDto;
 import kwangwoon.chambit.dontworry.domain.portfolio.dto.response.PortfolioEditResponseDto;
 import kwangwoon.chambit.dontworry.domain.portfolio.dto.response.PortfolioManageResponseDto;
+import kwangwoon.chambit.dontworry.domain.portfolio.dto.response.dto.PortfolioRecommendDerivativeDto;
 import kwangwoon.chambit.dontworry.domain.portfolio.service.PortfolioService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -77,23 +78,40 @@ class PortfolioControllerTest {
         Assertions.assertThat(editList).isEqualTo(ResponseEntity.ok(portfolioEdit));
     }
 
-
-
     @Test
     public void getPageDerivative_whenValidProvided_thenReturnSuccessResponse(){
 
-        Result result = getPageDerivative();
+        List<PortfolioRecommendDerivativeDto> result = getPageDerivative();
 
-        when(portfolioService.getAllPortfolioRecommendDerivative(eq(result.pageRequest()),any())).thenReturn(result.dtos());
+        when(portfolioService.getAllPortfolioRecommendDerivative(any())).thenReturn(result);
 
         UserDetails user = getAuthentication();
 
-        ResponseEntity<?> recommend = portfolioController.getRecommend(0,user);
+        ResponseEntity<?> recommend = portfolioController.getRecommend(user);
 
-        verify(portfolioService).getAllPortfolioRecommendDerivative(eq(result.pageRequest()),any());
+        verify(portfolioService).getAllPortfolioRecommendDerivative(any());
 
-        Assertions.assertThat(recommend).isEqualTo(ResponseEntity.ok(result.dtos()));
+        Assertions.assertThat(recommend).isEqualTo(ResponseEntity.ok(result));
 
     }
+
+
+
+//    @Test
+//    public void getPageDerivative_whenValidProvided_thenReturnSuccessResponse(){
+//
+//        Result result = getPageDerivative();
+//
+//        when(portfolioService.getAllPortfolioRecommendDerivative(eq(result.pageRequest()),any())).thenReturn(result.dtos());
+//
+//        UserDetails user = getAuthentication();
+//
+//        ResponseEntity<?> recommend = portfolioController.getRecommend(0,user);
+//
+//        verify(portfolioService).getAllPortfolioRecommendDerivative(eq(result.pageRequest()),any());
+//
+//        Assertions.assertThat(recommend).isEqualTo(ResponseEntity.ok(result.dtos()));
+//
+//    }
 
 }

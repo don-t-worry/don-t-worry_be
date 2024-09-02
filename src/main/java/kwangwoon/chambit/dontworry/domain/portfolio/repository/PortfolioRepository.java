@@ -15,6 +15,9 @@ public interface PortfolioRepository extends JpaRepository<Portfolio,Long> {
     @Query("select p from Portfolio p join fetch p.user u left join fetch p.stock s left join fetch p.derivative d where u.username= :username")
     Page<Portfolio> findByUsernameAllDerivative(@Param("username")String username, Pageable pageable);
 
+    @Query("select p from Portfolio p join fetch p.user u left join fetch p.stock s left join fetch p.derivative d where u.username= :username")
+    List<Portfolio> findByUsernameAllDerivative(@Param("username")String username);
+
     @Query("select p from Portfolio p join fetch p.user u left join fetch p.stock s where u.username=:username")
     List<Portfolio> findByStockAllPrices(@Param("username")String username);
 

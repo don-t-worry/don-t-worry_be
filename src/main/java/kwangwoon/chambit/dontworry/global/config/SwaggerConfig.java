@@ -1,7 +1,10 @@
 package kwangwoon.chambit.dontworry.global.config;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +24,11 @@ public class SwaggerConfig {
         localhost.setUrl("http://localhost:8080");
 
         OpenAPI openAPI =  new OpenAPI()
+                .addSecurityItem(new SecurityRequirement()
+                        .addList("Bearer Authentication"))
+                .components(new Components().addSecuritySchemes(
+                        "Bearer Authentication", createAPIKeyScheme()
+                ))
                 .info(new Info()
                         .title("돈워리 프로젝트 API")
                         .description("서버 api 제공")
@@ -29,5 +37,11 @@ public class SwaggerConfig {
         openAPI.setServers(Arrays.asList(server, localhost));
 
         return openAPI;
+    }
+
+    private SecurityScheme createAPIKeyScheme(){
+        return new SecurityScheme().type(SecurityScheme.Type.HTTP)
+                .bearerFormat("JWT")
+                .scheme("bearer");
     }
 }

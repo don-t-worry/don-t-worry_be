@@ -22,36 +22,41 @@ import java.util.List;
 @Tag(name = "포트폴리오 api")
 public class PortfolioController {
 
-    @Autowired
-    private PortfolioService portfolioService;
+    private final PortfolioService portfolioService;
 
     @GetMapping("/hedgehome")
-    @Operation(summary = "헷지 home 화면")
+    @Operation(summary = "헷지 home 화면", description = "토큰 정보 필요함, pie chart에 대한 정보와, 헷지 추천 상품 보여줌")
     public ResponseEntity<?> getHedgeHome(@AuthenticationPrincipal UserDetails userDetails){
         return ResponseEntity.ok(portfolioService.getHedgeHome(userDetails));
     }
 
+//    @GetMapping("/recommend/hedgeall")
+//    @Operation(summary = "헷지 상품 추천 화면", description = "무한 스크롤을 위해 page 입력받음")
+//    public ResponseEntity<?> getRecommend(@RequestParam("page") int page, @AuthenticationPrincipal UserDetails userDetails){
+//        PageRequest pageRequest = PageRequest.of(page,10, Sort.by("stockQuantity").descending());
+//        return ResponseEntity.ok(portfolioService.getAllPortfolioRecommendDerivative(pageRequest,userDetails));
+//    }
+
     @GetMapping("/recommend/hedgeall")
-    @Operation(summary = "헷지 상품 추천 화면", description = "무한 스크롤을 위해 page 입력받음")
-    public ResponseEntity<?> getRecommend(@RequestParam("page") int page, @AuthenticationPrincipal UserDetails userDetails){
-        PageRequest pageRequest = PageRequest.of(page,10, Sort.by("stockQuantity").descending());
-        return ResponseEntity.ok(portfolioService.getAllPortfolioRecommendDerivative(pageRequest,userDetails));
+    @Operation(summary = "헷지 상품 추천 화면", description = "모든 헷지 추천 상품 보여줌, 현재는 list가 반환값임")
+    public ResponseEntity<?> getRecommend(@AuthenticationPrincipal UserDetails userDetails){
+        return ResponseEntity.ok(portfolioService.getAllPortfolioRecommendDerivative(userDetails));
     }
 
     @GetMapping("/edit")
-    @Operation(summary = "사용자 포트폴리오 편집 페이지", description = "무한 스크롤 고려사항 api")
+    @Operation(summary = "사용자 포트폴리오 편집 페이지", description = "토큰 정보 필요함, 무한 스크롤 고려사항 api")
     public ResponseEntity<?> getEditList(@AuthenticationPrincipal UserDetails userDetails){
         return ResponseEntity.ok(portfolioService.getPortfolioEdit(userDetails));
     }
 
     @GetMapping("/manage")
-    @Operation(summary = "사용자 포트폴리오 페이지", description = "무한 스크롤 고려사항 api")
+    @Operation(summary = "사용자 포트폴리오 페이지", description = "토큰 정보 필요함, 무한 스크롤 고려사항 api")
     public ResponseEntity<?> getPortfolioManage(@AuthenticationPrincipal UserDetails userDetails){
         return ResponseEntity.ok(portfolioService.getPortfolioManage(userDetails));
     }
 
     @PostMapping("/insert")
-    @Operation(summary = "포트폴리오 입력")
+    @Operation(summary = "포트폴리오 입력", description = "토큰 정보 필요함")
     public ResponseEntity<?> insertPortfolio(@RequestBody PortfolioInsertDto portfolioInsertDto, @AuthenticationPrincipal UserDetails userDetails){
         portfolioService.insertPortfolio(portfolioInsertDto, userDetails);
         return ResponseEntity.ok("success");
@@ -67,7 +72,7 @@ public class PortfolioController {
 
     @DeleteMapping()
     @Operation(summary = "포트폴리오 삭제")
-    public ResponseEntity<?> deletePortfolio(@RequestParam List<Long> portfolioIds){
+    public ResponseEntity<?> deletePortfolio(@RequestBody List<Long> portfolioIds){
         portfolioService.deletePortfolios(portfolioIds);
         return ResponseEntity.ok("success");
     }
