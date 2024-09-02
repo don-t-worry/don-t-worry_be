@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kwangwoon.chambit.dontworry.domain.user.domain.User;
+import kwangwoon.chambit.dontworry.domain.user.repository.UserRepository;
 import kwangwoon.chambit.dontworry.global.config.DomainConfig;
 import kwangwoon.chambit.dontworry.global.security.jwt.dto.TokenDto;
 import kwangwoon.chambit.dontworry.global.security.jwt.util.JWTUtil;
@@ -28,6 +30,7 @@ import static kwangwoon.chambit.dontworry.global.config.DomainConfig.FrontServer
 @RequiredArgsConstructor
 public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JWTUtil jwtUtil;
+    private final UserRepository userRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -40,21 +43,37 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         String username = oauth2Client.getUsername();
 
+
+        Map<String,String> body = new HashMap<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+
         if(oauth2Client.isExist()){
             TokenDto token = jwtUtil.createToken(username, role);
             response.addHeader(HttpHeaders.AUTHORIZATION, token.getAccessToken());
+
+            User user = userRepository.findByUsername(username).get();
+
+            body.put("name",user.getName());
+            String jsonBody = objectMapper.writeValueAsString(body);
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            PrintWriter writer = response.getWriter();
+            writer.write(jsonBody);
+
+            response.setStatus(200);
 //            response.sendRedirect(FrontServer.getPresentAddress() + "/hedge/home");
         }else{
-            Map<String,String> body = new HashMap<>();
             body.put("username",username);
-
-            ObjectMapper objectMapper = new ObjectMapper();
             String jsonBody = objectMapper.writeValueAsString(body);
 
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             PrintWriter writer = response.getWriter();
             writer.write(jsonBody);
+
+            response.setStatus(201);
 //            response.sendRedirect(FrontServer.getPresentAddress() + "/signup/name?username="+username);
         }
     }
