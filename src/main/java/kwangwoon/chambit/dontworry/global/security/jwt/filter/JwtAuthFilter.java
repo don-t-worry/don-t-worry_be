@@ -29,9 +29,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, IllegalArgumentException {
-        String accessToken = request.getHeader("Authorization");
+        String accessTokenHeader = request.getHeader("Authorization");
 
-        if(!StringUtils.hasText(accessToken)){
+        if(!StringUtils.hasText(accessTokenHeader)){
             doFilter(request, response, filterChain);
             return;
         }
@@ -42,6 +42,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
         //refresh를 처리하는 로직
+
+        String accessToken = accessTokenHeader.split(" ")[1];
 
         if(!jwtUtil.validateToken(accessToken)){
             RefreshToken refreshToken = refreshTokenService.getRefreshToken(accessToken);
