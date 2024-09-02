@@ -1,10 +1,13 @@
 package kwangwoon.chambit.dontworry.domain.user.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import kwangwoon.chambit.dontworry.domain.user.domain.User;
 import kwangwoon.chambit.dontworry.domain.user.dto.request.UserSignUpDto;
 import kwangwoon.chambit.dontworry.domain.user.enums.HedgeType;
 import kwangwoon.chambit.dontworry.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,29 +18,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "user api")
 public class UserController {
     private final UserService userService;
 
     @Operation(summary = "회원가입")
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(UserSignUpDto userSignUpDto){
-        userService.signUp(userSignUpDto);
+        User user = userService.signUp(userSignUpDto);
 
-//        // 리다이렉션할 URL
-//        String redirectUrl = "/welcome";
-//
-//        // 응답 헤더 설정
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("Custom-Header", "HeaderValue"); // 추가 헤더 설정
-//        headers.add(HttpHeaders.LOCATION, redirectUrl); // 리다이렉션 URL 설정
-//
-//        // ResponseEntity를 사용하여 상태 코드와 헤더 설정
-//        return ResponseEntity
-//                .status(HttpStatus.FOUND) // 302 Found 상태 코드로 리다이렉션
-//                .headers(headers)         // 설정한 헤더 추가
-//                .body(ResponseDto.success("Redirecting...")); // 본문 설정 (선택적)
-//    }
-        return ResponseEntity.ok("success");
+        System.out.println(user.getUsername() +" " + user.getRole());
+
+        String token = userService.getToken(user.getUsername(), user.getRole());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION,token);
+
+        return ResponseEntity.ok().headers(headers).body("success");
     }
 
     @Operation(summary = "헷지 타입 리스트 출력")
