@@ -24,11 +24,11 @@ public class ServiceMoneyView {
     private Long activeInvestments;
 
     @Column(name = "profit_rate")
-    private Long profitRate;
+    private Double profitRate;
 
 
     @Builder
-    public ServiceMoneyView(Long investmentBalance, Long availableInvestments, Long activeInvestments, Long profitRate){
+    public ServiceMoneyView(Long investmentBalance, Long availableInvestments, Long activeInvestments, Double profitRate){
         this.investmentBalance = investmentBalance;
         this.availableInvestments = availableInvestments;
         this.activeInvestments = activeInvestments;

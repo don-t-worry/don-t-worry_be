@@ -23,7 +23,7 @@ public class TradeHistoryResponseDto {
         this.derivativeName = tradeHistory.getDerivative().getDerivativeName();
         this.optionType = tradeHistory.getDerivative().getOptionType();
         this.tradePrice = tradeHistory.getPrice();
-        this.commission = (double) tradeHistory.getCommission();
+        this.commission = tradeHistory.getCommission();
         this.settlementAmount = (tradeHistory.getPrice() * (1-(commission/100)));
         this.time = tradeHistory.getTime();
     }

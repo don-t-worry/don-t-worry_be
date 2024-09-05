@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class TradeHomeDto {
     Long serviceTotalBalance;
-    Long profitRate;
+    Double profitRate;
     List<TradeHistoryResponseDto> serviceTradeHistory;
 
     @Builder
