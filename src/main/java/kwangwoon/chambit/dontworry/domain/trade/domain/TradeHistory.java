@@ -19,7 +19,7 @@ public class TradeHistory {
     @Column(name = "trade_history_id")
     private Long id;
 
-    private Long commission;
+    private Double commission;
     private LocalDateTime time;
     private Long investmentBalance;
     private Long activeInvestments;
@@ -36,7 +36,7 @@ public class TradeHistory {
     private Derivative derivative;
 
     @Builder
-    public TradeHistory(Long commission, LocalDateTime time, Long investmentBalance, Long activeInvestments, Long profit, Long price, Long count, TradeType tradeType, Derivative derivative){
+    public TradeHistory(Double commission, LocalDateTime time, Long investmentBalance, Long activeInvestments, Long profit, Long price, Long count, TradeType tradeType, Derivative derivative){
         this.commission = commission;
         this.time = time;
         this.investmentBalance = investmentBalance;
