@@ -1,10 +1,7 @@
 package kwangwoon.chambit.dontworry.domain.servicemoney.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.Immutable;
 
 @Entity
@@ -12,9 +9,9 @@ import org.hibernate.annotations.Immutable;
 @Table(name = "service_money_view")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"investmentBalance", "availableInvestments" , "activeInvestments"})
+@ToString(of = {"investmentBalance", "availableInvestments" , "activeInvestments", "profitRate"})
 public class ServiceMoneyView {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @Column(name = "id")
     private Long id;
 
     @Column(name = "investment_balance")
@@ -27,6 +24,15 @@ public class ServiceMoneyView {
     private Long activeInvestments;
 
     @Column(name = "profit_rate")
-    private Long profitRate;
+    private Double profitRate;
+
+
+    @Builder
+    public ServiceMoneyView(Long investmentBalance, Long availableInvestments, Long activeInvestments, Double profitRate){
+        this.investmentBalance = investmentBalance;
+        this.availableInvestments = availableInvestments;
+        this.activeInvestments = activeInvestments;
+        this.profitRate = profitRate;
+    }
 
 }
