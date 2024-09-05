@@ -3,10 +3,7 @@ package kwangwoon.chambit.dontworry.domain.usertrade.domain;
 import jakarta.persistence.*;
 import kwangwoon.chambit.dontworry.domain.trade.domain.TradeHistory;
 import kwangwoon.chambit.dontworry.domain.user.domain.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -36,4 +33,14 @@ public class UserTradeHistory {
     @JoinColumn(name = "trade_history_id")
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private TradeHistory tradeHistory;
+
+    @Builder
+    public UserTradeHistory(LocalDateTime time, Long investmentBalance, Long activeInvestments, Long profit, User user, TradeHistory tradeHistory){
+        this.time = time;
+        this.investmentBalance = investmentBalance;
+        this.activeInvestments = activeInvestments;
+        this.profit = profit;
+        this.user= user;
+        this.tradeHistory = tradeHistory;
+    }
 }
