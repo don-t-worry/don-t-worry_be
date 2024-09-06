@@ -6,10 +6,15 @@ import kwangwoon.chambit.dontworry.domain.user.domain.User;
 import kwangwoon.chambit.dontworry.domain.user.dto.request.UserHedgeTypeUpdateDto;
 import kwangwoon.chambit.dontworry.domain.user.dto.request.UserNameUpdateDto;
 import kwangwoon.chambit.dontworry.domain.user.dto.request.UserSignUpDto;
+import kwangwoon.chambit.dontworry.domain.user.dto.request.UsernameExistDto;
+import kwangwoon.chambit.dontworry.domain.user.dto.response.UsernameExistResponseDto;
+import kwangwoon.chambit.dontworry.domain.user.dto.response.UsernameResponseDto;
 import kwangwoon.chambit.dontworry.domain.user.enums.HedgeType;
 import kwangwoon.chambit.dontworry.domain.user.service.UserService;
+import kwangwoon.chambit.dontworry.global.security.jwt.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +31,21 @@ import java.util.Map;
 @Tag(name = "유저 api")
 public class UserController {
     private final UserService userService;
+
+    @PostMapping("/auth/user/exists")
+    @Operation(summary = "", description = "")
+    public ResponseEntity<?> existUsername(@RequestBody UsernameExistDto usernameExistDto){
+        UsernameResponseDto response = userService.existUsername(usernameExistDto);
+
+        if(response instanceof UsernameExistResponseDto){
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.AUTHORIZATION,((UsernameExistResponseDto) response).getToken());
+
+            return new ResponseEntity<>(response,headers, HttpStatus.ACCEPTED); //202
+        }else{
+            return new ResponseEntity<>(response,HttpStatus.NON_AUTHORITATIVE_INFORMATION); //203
+        }
+    }
 
     @Operation(summary = "회원가입", description = "회원가입 성공시 바로 토큰 정보 헤더에 담아서 return함")
     @PostMapping("/signup")

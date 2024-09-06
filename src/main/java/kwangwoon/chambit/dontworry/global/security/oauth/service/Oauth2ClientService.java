@@ -33,24 +33,24 @@ public class Oauth2ClientService extends DefaultOAuth2UserService {
 
         String username = oauth2Response.getProvider() + "" + oauth2Response.getId();
 
-        Oauth2ClientDto oauth2ClientDto = getOauthClientDto(username);
+        Oauth2ClientDto oauth2ClientDto = new Oauth2ClientDto(username,"");
 
         return new CustomOauth2ClientDto(oauth2ClientDto);
     }
 
-    private Oauth2ClientDto getOauthClientDto(String username) {
-        return userRepository.findByUsername(username)
-                .map(client -> Oauth2ClientDto.builder()
-                        .role(client.getRole())
-                        .username(client.getUsername())
-                        .isExist(true)
-                        .build()
-                )
-                .orElseGet(() -> Oauth2ClientDto.builder()
-                        .username(username)
-                        .isExist(false)
-                        .role("ROLE_USER")
-                        .build()
-                );
-    }
+//    private Oauth2ClientDto getOauthClientDto(String username) {
+//        return userRepository.findByUsername(username)
+//                .map(client -> Oauth2ClientDto.builder()
+//                        .role(client.getRole())
+//                        .username(client.getUsername())
+//                        .isExist(true)
+//                        .build()
+//                )
+//                .orElseGet(() -> Oauth2ClientDto.builder()
+//                        .username(username)
+//                        .isExist(false)
+//                        .role("ROLE_USER")
+//                        .build()
+//                );
+//    }
 }
