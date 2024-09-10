@@ -12,6 +12,6 @@ public enum DomainConfig {
     }
 
     public String getPresentAddress(){
-        return LocalHttps.address;
+        return LocalHttp.address;
     }
 }
