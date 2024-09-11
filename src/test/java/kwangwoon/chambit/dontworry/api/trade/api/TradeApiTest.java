@@ -1,6 +1,5 @@
 package kwangwoon.chambit.dontworry.api.trade.api;
 
-import kwangwoon.chambit.dontworry.api.trade.TestDataUtil;
 import kwangwoon.chambit.dontworry.domain.derivative.domain.Derivative;
 import kwangwoon.chambit.dontworry.domain.servicemoney.domain.ServiceMoneyView;
 import kwangwoon.chambit.dontworry.domain.trade.api.TradeHistoryController;
@@ -9,7 +8,7 @@ import kwangwoon.chambit.dontworry.domain.trade.dto.response.TradeHistoryRespons
 import kwangwoon.chambit.dontworry.domain.trade.dto.response.TradeHomeDto;
 import kwangwoon.chambit.dontworry.domain.trade.service.TradeHistoryService;
 import kwangwoon.chambit.dontworry.domain.user.domain.User;
-import kwangwoon.chambit.dontworry.domain.usermoney.api.UserMoneyViewController;
+import kwangwoon.chambit.dontworry.domain.usermoney.api.UserMoneyHomePageController;
 import kwangwoon.chambit.dontworry.domain.usermoney.domain.UserMoneyView;
 import kwangwoon.chambit.dontworry.domain.usermoney.dto.response.UserMoneyViewResponse;
 import kwangwoon.chambit.dontworry.domain.usermoney.service.UserMoneyViewService;
@@ -18,7 +17,6 @@ import kwangwoon.chambit.dontworry.domain.usertrade.dto.response.UserTradeHistor
 import kwangwoon.chambit.dontworry.domain.usertrade.service.UserTradeHistoryService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -37,7 +35,7 @@ import static org.mockito.Mockito.*;
 @Transactional
 public class TradeApiTest {
     @Autowired
-    UserMoneyViewController userMoneyViewController;
+    UserMoneyHomePageController userMoneyViewController;
 
     @MockBean
     UserMoneyViewService userMoneyViewService;

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/trade")
 @Tag(name = "시세차익 api")
-public class UserMoneyViewController {
+public class UserMoneyHomePageController {
 
     private final UserMoneyViewService userMoneyViewService;
 
