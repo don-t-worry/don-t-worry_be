@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ExceptionController {
 
-    @ExceptionHandler
+    @ExceptionHandler(JwtException.class)
     public ResponseEntity<?> handleRefreshTokenException(JwtException ex){
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .status(402)
@@ -21,7 +21,7 @@ public class ExceptionController {
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception ex){
 
         ErrorResponse errorResponse = ErrorResponse.builder()
