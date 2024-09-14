@@ -82,4 +82,15 @@ public class UserController {
         userService.updateHedgeType(userHedgeTypeUpdateDto.getHedgeType(), user);
         return ResponseEntity.ok("success");
     }
+
+    @Operation(summary = "로그아웃 핸들러", description = "프론트에서 헤더 삭제시켜줘야함")
+    @PostMapping("/logout")
+    public void fakeLogout(){}
+
+    @Operation(summary = "회원탈퇴", description = "프론트에서 헤더 삭제해야함")
+    @DeleteMapping("/user")
+    public ResponseEntity<?> deletionUser(@AuthenticationPrincipal UserDetails user){
+        userService.deletionUser(user);
+        return ResponseEntity.ok("success");
+    }
 }

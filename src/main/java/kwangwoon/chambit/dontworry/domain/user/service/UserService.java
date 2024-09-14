@@ -9,6 +9,8 @@ import kwangwoon.chambit.dontworry.domain.user.dto.response.UsernameNotExistResp
 import kwangwoon.chambit.dontworry.domain.user.dto.response.UsernameResponseDto;
 import kwangwoon.chambit.dontworry.domain.user.enums.HedgeType;
 import kwangwoon.chambit.dontworry.domain.user.repository.UserRepository;
+import kwangwoon.chambit.dontworry.global.infra.redis.RefreshToken;
+import kwangwoon.chambit.dontworry.global.infra.redis.RefreshTokenService;
 import kwangwoon.chambit.dontworry.global.security.jwt.dto.TokenDto;
 import kwangwoon.chambit.dontworry.global.security.jwt.util.JWTUtil;
 import kwangwoon.chambit.dontworry.global.security.oauth.dto.CustomOauth2ClientDto;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final JWTUtil jwtUtil;
+    private final RefreshTokenService refreshTokenService;
 
     @Transactional
     public User signUp(UserSignUpDto userSignUpDto){
@@ -74,6 +77,15 @@ public class UserService {
 
         User user = userRepository.findByUsername(username).get();
         user.setHedgeType(updateHedge);
+    }
+
+    @Transactional
+    public void deletionUser(UserDetails user){
+        String username = user.getUsername();
+        userRepository.deleteByUsername(username);
+
+        RefreshToken refreshToken = refreshTokenService.findByUsername(username);
+        refreshTokenService.setLogout(refreshToken.getAccessToken());
     }
 
 }
