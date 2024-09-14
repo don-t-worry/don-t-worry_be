@@ -23,6 +23,7 @@ public class Alarm {
     @Enumerated(EnumType.STRING)
     private AlarmStatus alarmStatus;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     private AlarmType alarmType;
 
@@ -30,5 +31,9 @@ public class Alarm {
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
+
+    public Alarm(User user){
+        this.user = user;
+    }
 
 }

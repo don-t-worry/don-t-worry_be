@@ -1,5 +1,9 @@
 package kwangwoon.chambit.dontworry.domain.user.service;
 
+import kwangwoon.chambit.dontworry.domain.alarm.domain.Alarm;
+import kwangwoon.chambit.dontworry.domain.alarm.enums.AlarmStatus;
+import kwangwoon.chambit.dontworry.domain.alarm.enums.AlarmType;
+import kwangwoon.chambit.dontworry.domain.alarm.repository.AlarmRepository;
 import kwangwoon.chambit.dontworry.domain.user.domain.User;
 import kwangwoon.chambit.dontworry.domain.user.dto.request.UserSignUpDto;
 import kwangwoon.chambit.dontworry.domain.user.dto.request.UsernameExistDto;
@@ -34,10 +38,29 @@ public class UserService {
     private final JWTUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
 
+    private final AlarmRepository alarmRepository;
+
     @Transactional
     public User signUp(UserSignUpDto userSignUpDto){
         User user = userSignUpDto.toUser();
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        saveAlarm(savedUser);
+
+        return savedUser;
+    }
+
+    private void saveAlarm(User savedUser) {
+        Alarm alarm1 = new Alarm(savedUser);
+        alarm1.setAlarmStatus(AlarmStatus.ON);
+        alarm1.setAlarmType(AlarmType.ARBITRAGE);
+
+        Alarm alarm2 = new Alarm(savedUser);
+        alarm2.setAlarmStatus(AlarmStatus.ON);
+        alarm2.setAlarmType(AlarmType.EXPIRE);
+
+        alarmRepository.save(alarm1);
+        alarmRepository.save(alarm2);
     }
 
     public UsernameResponseDto existUsername(UsernameExistDto usernameExistDto){
