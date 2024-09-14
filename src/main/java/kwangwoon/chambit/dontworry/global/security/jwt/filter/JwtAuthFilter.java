@@ -44,18 +44,19 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         //refresh를 처리하는 로직
 
         String accessToken = accessTokenHeader.split(" ")[1];
+        RefreshToken refreshToken = refreshTokenService.getRefreshToken(accessToken);
 
         if(!jwtUtil.validateToken(accessToken)){
-            RefreshToken refreshToken = refreshTokenService.getRefreshToken(accessToken);
-
             if(jwtUtil.validateToken(refreshToken.getRefreshToken())){
                 throw new JwtException("Access Token 만료");
             }else{
                 throw new JwtException("Refresh Token 만료");
             }
-
         }
         if(jwtUtil.validateToken(accessToken)){
+            if(refreshToken.getIsLogout().equals("true")){
+                throw new JwtException("Log out 유저");
+            }
             Authentication authentication = jwtUtil.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

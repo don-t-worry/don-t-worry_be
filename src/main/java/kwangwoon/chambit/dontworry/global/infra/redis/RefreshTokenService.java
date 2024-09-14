@@ -16,7 +16,19 @@ public class RefreshTokenService {
                 .refreshToken(token.getRefreshToken())
                 .accessToken(token.getAccessToken())
                 .username(username)
+                .isLogout("false")
                 .build();
+
+        refreshTokenRepository.save(refreshToken);
+    }
+
+    @Transactional
+    public void setLogout(String accessToken){
+
+        RefreshToken refreshToken = refreshTokenRepository.findByAccessToken(accessToken)
+                .orElseThrow(() -> new IllegalArgumentException("AccessToken 존재하지 않음"));
+
+        refreshToken.setIsLogout("true");
 
         refreshTokenRepository.save(refreshToken);
     }
