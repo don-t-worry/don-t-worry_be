@@ -1,4 +1,4 @@
-package kwangwoon.chambit.dontworry.global.infra.redis;
+package kwangwoon.chambit.dontworry.global.infra.redis.refreshToken;
 
 import kwangwoon.chambit.dontworry.global.security.jwt.dto.TokenDto;
 import lombok.RequiredArgsConstructor;

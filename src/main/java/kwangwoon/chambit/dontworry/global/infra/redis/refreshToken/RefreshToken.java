@@ -1,4 +1,4 @@
-package kwangwoon.chambit.dontworry.global.infra.redis;
+package kwangwoon.chambit.dontworry.global.infra.redis.refreshToken;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;

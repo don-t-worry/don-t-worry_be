@@ -13,18 +13,15 @@ import kwangwoon.chambit.dontworry.domain.user.dto.response.UsernameNotExistResp
 import kwangwoon.chambit.dontworry.domain.user.dto.response.UsernameResponseDto;
 import kwangwoon.chambit.dontworry.domain.user.enums.HedgeType;
 import kwangwoon.chambit.dontworry.domain.user.repository.UserRepository;
-import kwangwoon.chambit.dontworry.global.infra.redis.RefreshToken;
-import kwangwoon.chambit.dontworry.global.infra.redis.RefreshTokenService;
+import kwangwoon.chambit.dontworry.global.infra.redis.refreshToken.RefreshToken;
+import kwangwoon.chambit.dontworry.global.infra.redis.refreshToken.RefreshTokenService;
 import kwangwoon.chambit.dontworry.global.security.jwt.dto.TokenDto;
 import kwangwoon.chambit.dontworry.global.security.jwt.util.JWTUtil;
-import kwangwoon.chambit.dontworry.global.security.oauth.dto.CustomOauth2ClientDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
