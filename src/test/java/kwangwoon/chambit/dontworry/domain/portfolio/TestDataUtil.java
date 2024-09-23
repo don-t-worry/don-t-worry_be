@@ -247,10 +247,10 @@ public class TestDataUtil {
     public static List<Stock> getStocks() {
 
         return List.of(
-                Stock.builder().stockName("삼성").imageUrl("삼성 이미지").build(),
-                Stock.builder().stockName("엘지").imageUrl("엘지 이미지").build(),
-                Stock.builder().stockName("sk").imageUrl("sk 이미지").build(),
-                Stock.builder().stockName("apple").imageUrl("apple 이미지").build()
+                Stock.builder().stockName("삼성전자").imageUrl("삼성 이미지").stockCode("005930").build(),
+                Stock.builder().stockName("엘지").imageUrl("엘지 이미지").stockCode("003550").build(),
+                Stock.builder().stockName("sk").imageUrl("sk 이미지").stockCode("034730").build(),
+                Stock.builder().stockName("현대차").imageUrl("apple 이미지").stockCode("005380").build()
         );
     }
 }

@@ -1,7 +1,6 @@
 package kwangwoon.chambit.dontworry.global.config;
 
-import kwangwoon.chambit.dontworry.global.infra.redis.RefreshToken;
-import kwangwoon.chambit.dontworry.global.infra.redis.RefreshTokenService;
+import kwangwoon.chambit.dontworry.global.infra.redis.refreshToken.RefreshTokenService;
 import kwangwoon.chambit.dontworry.global.security.jwt.filter.JwtAuthFilter;
 import kwangwoon.chambit.dontworry.global.security.jwt.filter.JwtExceptionFilter;
 import kwangwoon.chambit.dontworry.global.security.jwt.util.JWTUtil;
@@ -16,12 +15,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
-import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.List;
 

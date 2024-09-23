@@ -1,8 +1,8 @@
 package kwangwoon.chambit.dontworry.global.common.service;
 
 import io.jsonwebtoken.JwtException;
-import kwangwoon.chambit.dontworry.global.infra.redis.RefreshToken;
-import kwangwoon.chambit.dontworry.global.infra.redis.RefreshTokenService;
+import kwangwoon.chambit.dontworry.global.infra.redis.refreshToken.RefreshToken;
+import kwangwoon.chambit.dontworry.global.infra.redis.refreshToken.RefreshTokenService;
 import kwangwoon.chambit.dontworry.global.security.jwt.dto.TokenDto;
 import kwangwoon.chambit.dontworry.global.security.jwt.util.JWTUtil;
 import lombok.RequiredArgsConstructor;

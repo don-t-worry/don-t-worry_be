@@ -58,9 +58,6 @@ class PortfolioServiceTest {
     private DerivativeRepository derivativeRepository;
 
 
-    @Autowired
-    private StockPriceService stockPriceService;
-
     @BeforeEach
     public void insertData(){
 
