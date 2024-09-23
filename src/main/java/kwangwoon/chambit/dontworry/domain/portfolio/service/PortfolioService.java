@@ -13,6 +13,7 @@ import kwangwoon.chambit.dontworry.domain.stock.repository.StockRepository;
 import kwangwoon.chambit.dontworry.domain.user.domain.User;
 import kwangwoon.chambit.dontworry.domain.user.repository.UserRepository;
 import kwangwoon.chambit.dontworry.global.common.request.StockPriceService;
+import kwangwoon.chambit.dontworry.global.infra.redis.stockPrice.PresentStockPriceService;
 import kwangwoon.chambit.dontworry.global.security.oauth.dto.CustomOauth2ClientDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,7 +36,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
-    private final StockPriceService stockPriceService;
+    private final PresentStockPriceService stockPriceService;
     private final UserRepository userRepository;
     private final StockRepository stockRepository;
 
@@ -204,21 +205,11 @@ public class PortfolioService {
 
     private List<PortfolioEditResponseDto> getEditPortfolio(List<Portfolio> portfolios){
 
-
-        List<List<Portfolio>> chunks = getChunks(portfolios, 30);
-
-        Flux<PortfolioEditResponseDto> flux = Flux.fromIterable(chunks)
-                .flatMap(chunk -> {
-                    AtomicInteger count = new AtomicInteger(0);
-                    return stockPriceService.getPresentStockPrice(chunk)
-                            .map(presentStockPrice -> {
-                                Portfolio p = chunk.get(count.getAndIncrement());
-                                return new PortfolioEditResponseDto(p, presentStockPrice);
-                            });
-                });
-
-
-        List<PortfolioEditResponseDto> result = flux.collectList().block();
+        List<Long> presentStockPrices = stockPriceService.getPresentStockPrice(portfolios);
+        List<PortfolioEditResponseDto> result = new ArrayList<>();
+        for(int i=0; i< portfolios.size(); i++){
+            result.add(new PortfolioEditResponseDto(portfolios.get(i), presentStockPrices.get(i)));
+        }
 
         result.sort(Comparator.comparing(item ->
             new BigDecimal(item.getStockQuantity()).multiply(new BigDecimal(item.getPresentPrice()))
@@ -229,21 +220,18 @@ public class PortfolioService {
 
     private List<PortfolioElementDto> getPresentPortfolio(List<Portfolio> portfolios) {
 
-        List<List<Portfolio>> chunks = getChunks(portfolios, 30);
+        List<Long> presentStockPrices = stockPriceService.getPresentStockPrice(portfolios);
+        List<PortfolioElementDto> result = new ArrayList<>();
 
-        Flux<PortfolioElementDto> flux = Flux.fromIterable(chunks)
-                .flatMap(chunk -> {
-                    AtomicInteger count = new AtomicInteger(0);
-                    return stockPriceService.getPresentStockPrice(chunk)
-                            .map(presentStockPrice -> {
-                                Portfolio p = chunk.get(count.getAndIncrement());
-                                long profit = (presentStockPrice - p.getStockAveragePrice()) * p.getStockQuantity();
-                                float profitRate = ((float) profit / (p.getStockAveragePrice() * p.getStockQuantity())) * 100;
-                                return new PortfolioElementDto(p, presentStockPrice, profit, profitRate);
-                            });
-                });
+        for(int i=0; i<portfolios.size(); i++){
+            Long presentStockPrice = presentStockPrices.get(i);
+            Portfolio p = portfolios.get(i);
 
-        List<PortfolioElementDto> result = flux.collectList().block();
+            long profit = (presentStockPrice - p.getStockAveragePrice()) * p.getStockQuantity();
+            float profitRate = ((float) profit / (p.getStockAveragePrice() * p.getStockQuantity())) * 100;
+
+            result.add(new PortfolioElementDto(p, presentStockPrice, profit, profitRate));
+        }
 
         result.sort(Comparator.comparing(item ->
                 new BigDecimal(item.getStockQuantity()).multiply(new BigDecimal(item.getPresentPrice()))
@@ -252,13 +240,4 @@ public class PortfolioService {
         return result;
     }
 
-    private List<List<Portfolio>> getChunks(List<Portfolio> list, int size){
-        List<List<Portfolio>> result = new ArrayList<>();
-
-        for(int i=0; i<list.size(); i+=size){
-            result.add(new ArrayList<>(list.subList(i,Math.min(i + size, list.size()))));
-        }
-
-        return result;
-    }
 }
