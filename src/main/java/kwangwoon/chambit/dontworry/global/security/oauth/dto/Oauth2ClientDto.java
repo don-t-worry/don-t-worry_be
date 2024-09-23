@@ -14,7 +14,7 @@ public class Oauth2ClientDto {
 
 
     @Builder
-    public Oauth2ClientDto(String username,String role){
+    public Oauth2ClientDto(String username,String role, boolean isExist){
         this.username = username;
         this.role = "ROLE_USER";
         this.isExist = true;

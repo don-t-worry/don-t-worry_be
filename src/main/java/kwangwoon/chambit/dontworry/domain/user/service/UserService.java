@@ -1,5 +1,9 @@
 package kwangwoon.chambit.dontworry.domain.user.service;
 
+import kwangwoon.chambit.dontworry.domain.alarm.domain.Alarm;
+import kwangwoon.chambit.dontworry.domain.alarm.enums.AlarmStatus;
+import kwangwoon.chambit.dontworry.domain.alarm.enums.AlarmType;
+import kwangwoon.chambit.dontworry.domain.alarm.repository.AlarmRepository;
 import kwangwoon.chambit.dontworry.domain.user.domain.User;
 import kwangwoon.chambit.dontworry.domain.user.dto.request.UserSignUpDto;
 import kwangwoon.chambit.dontworry.domain.user.dto.request.UsernameExistDto;
@@ -9,16 +13,15 @@ import kwangwoon.chambit.dontworry.domain.user.dto.response.UsernameNotExistResp
 import kwangwoon.chambit.dontworry.domain.user.dto.response.UsernameResponseDto;
 import kwangwoon.chambit.dontworry.domain.user.enums.HedgeType;
 import kwangwoon.chambit.dontworry.domain.user.repository.UserRepository;
+import kwangwoon.chambit.dontworry.global.infra.redis.refreshToken.RefreshToken;
+import kwangwoon.chambit.dontworry.global.infra.redis.refreshToken.RefreshTokenService;
 import kwangwoon.chambit.dontworry.global.security.jwt.dto.TokenDto;
 import kwangwoon.chambit.dontworry.global.security.jwt.util.JWTUtil;
-import kwangwoon.chambit.dontworry.global.security.oauth.dto.CustomOauth2ClientDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -30,11 +33,31 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final JWTUtil jwtUtil;
+    private final RefreshTokenService refreshTokenService;
+
+    private final AlarmRepository alarmRepository;
 
     @Transactional
     public User signUp(UserSignUpDto userSignUpDto){
         User user = userSignUpDto.toUser();
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        saveAlarm(savedUser);
+
+        return savedUser;
+    }
+
+    private void saveAlarm(User savedUser) {
+        Alarm alarm1 = new Alarm(savedUser);
+        alarm1.setAlarmStatus(AlarmStatus.ON);
+        alarm1.setAlarmType(AlarmType.ARBITRAGE);
+
+        Alarm alarm2 = new Alarm(savedUser);
+        alarm2.setAlarmStatus(AlarmStatus.ON);
+        alarm2.setAlarmType(AlarmType.EXPIRE);
+
+        alarmRepository.save(alarm1);
+        alarmRepository.save(alarm2);
     }
 
     public UsernameResponseDto existUsername(UsernameExistDto usernameExistDto){
@@ -74,6 +97,15 @@ public class UserService {
 
         User user = userRepository.findByUsername(username).get();
         user.setHedgeType(updateHedge);
+    }
+
+    @Transactional
+    public void deletionUser(UserDetails user){
+        String username = user.getUsername();
+        userRepository.deleteByUsername(username);
+
+        RefreshToken refreshToken = refreshTokenService.findByUsername(username);
+        refreshTokenService.setLogout(refreshToken.getAccessToken());
     }
 
 }

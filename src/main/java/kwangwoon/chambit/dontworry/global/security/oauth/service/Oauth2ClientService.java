@@ -33,7 +33,7 @@ public class Oauth2ClientService extends DefaultOAuth2UserService {
 
         String username = oauth2Response.getProvider() + "" + oauth2Response.getId();
 
-        Oauth2ClientDto oauth2ClientDto = new Oauth2ClientDto(username,"");
+        Oauth2ClientDto oauth2ClientDto = new Oauth2ClientDto(username,"",true);
 
         return new CustomOauth2ClientDto(oauth2ClientDto);
     }

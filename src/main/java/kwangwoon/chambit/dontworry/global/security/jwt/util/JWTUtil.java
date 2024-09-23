@@ -2,7 +2,7 @@ package kwangwoon.chambit.dontworry.global.security.jwt.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import kwangwoon.chambit.dontworry.global.infra.redis.RefreshTokenService;
+import kwangwoon.chambit.dontworry.global.infra.redis.refreshToken.RefreshTokenService;
 import kwangwoon.chambit.dontworry.global.security.jwt.dto.TokenDto;
 import kwangwoon.chambit.dontworry.global.security.oauth.dto.CustomOauth2ClientDto;
 import kwangwoon.chambit.dontworry.global.security.oauth.dto.Oauth2ClientDto;

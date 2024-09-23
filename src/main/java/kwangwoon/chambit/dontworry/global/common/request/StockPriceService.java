@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Service
 @Slf4j
+@Deprecated
 public class StockPriceService {
 
     private String appKey;
