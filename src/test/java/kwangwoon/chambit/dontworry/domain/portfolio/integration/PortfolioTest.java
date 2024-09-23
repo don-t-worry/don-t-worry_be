@@ -110,7 +110,7 @@ public class PortfolioTest {
                 .apply(springSecurity())
                 .build()
                 .perform(
-                        get("/api/portfolio/recommend/hedgeall")
+                        get("/api/portfolio/hedgeall")
                                 .with(SecurityMockMvcRequestPostProcessors.user(user))
 //                                .param("page","0")
                 );
