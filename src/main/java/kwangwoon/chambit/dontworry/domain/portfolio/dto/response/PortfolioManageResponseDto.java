@@ -10,12 +10,13 @@ import java.util.List;
 @Data
 public class PortfolioManageResponseDto {
 
+    private Long portfolioValue;
     private List<PortfolioPieDto> pieChart;
     private List<PortfolioElementDto> stocks;
 
     @Builder
-    public PortfolioManageResponseDto(List<PortfolioPieDto> pieChart, List<PortfolioElementDto> stocks){
-
+    public PortfolioManageResponseDto(Long portfolioValue, List<PortfolioPieDto> pieChart, List<PortfolioElementDto> stocks){
+        this.portfolioValue = portfolioValue;
         this.pieChart = pieChart;
         this.stocks = stocks;
     }
