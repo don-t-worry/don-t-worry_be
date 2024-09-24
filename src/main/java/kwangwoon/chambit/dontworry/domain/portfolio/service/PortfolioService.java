@@ -130,6 +130,10 @@ public class PortfolioService {
 
 
         List<PortfolioElementDto> presentPortfolio = getPresentPortfolio(stockAllPrices);
+        Long portfolioValue = presentPortfolio.stream()
+                .map(stock -> stock.getStockQuantity() * stock.getPresentPrice())
+                .mapToLong(Long::longValue)
+                .sum();
 
         long sum = presentPortfolio.stream()
                 .map(x -> x.getPresentPrice() * x.getStockQuantity())
@@ -162,6 +166,7 @@ public class PortfolioService {
                 .collect(Collectors.toList());
 
         return PortfolioManageResponseDto.builder()
+                .portfolioValue(portfolioValue)
                 .pieChart(pieChart)
                 .stocks(presentPortfolio)
                 .build();
