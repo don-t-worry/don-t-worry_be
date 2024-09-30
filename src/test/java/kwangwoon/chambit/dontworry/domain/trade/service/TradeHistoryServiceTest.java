@@ -8,6 +8,7 @@ import kwangwoon.chambit.dontworry.domain.trade.domain.TradeHistory;
 import kwangwoon.chambit.dontworry.domain.trade.dto.response.TradeHistoryResponseDto;
 import kwangwoon.chambit.dontworry.domain.trade.dto.response.TradeHomeDto;
 import kwangwoon.chambit.dontworry.domain.trade.repository.TradeHistoryRepository;
+import kwangwoon.chambit.dontworry.global.common.dto.PageResponseDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -50,7 +51,7 @@ class TradeHistoryServiceTest {
 
         Mockito.when(tradeHistoryRepository.findByPage(pr)).thenReturn(result);
 
-        Page<TradeHistoryResponseDto> allTradeHistory = tradeHistoryService.getAllTradeHistory(pr);
+        PageResponseDto<TradeHistoryResponseDto> allTradeHistory = tradeHistoryService.getAllTradeHistory(pr);
 
         Mockito.verify(tradeHistoryRepository).findByPage(pr);
 
