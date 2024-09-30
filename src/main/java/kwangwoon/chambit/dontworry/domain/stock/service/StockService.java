@@ -3,6 +3,7 @@ package kwangwoon.chambit.dontworry.domain.stock.service;
 import kwangwoon.chambit.dontworry.domain.stock.domain.Stock;
 import kwangwoon.chambit.dontworry.domain.stock.dto.response.StockSearchDto;
 import kwangwoon.chambit.dontworry.domain.stock.repository.StockRepository;
+import kwangwoon.chambit.dontworry.global.common.dto.PageResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,9 +19,9 @@ import java.util.stream.Collectors;
 public class StockService {
     private final StockRepository stockRepository;
 
-    public Page<StockSearchDto> getSearchStock(String searchKeyword, Pageable pageable){
-        return stockRepository.findBySearchKeyword(searchKeyword, pageable)
-                .map(StockSearchDto::new);
+    public PageResponseDto<StockSearchDto> getSearchStock(String searchKeyword, Pageable pageable){
+        return new PageResponseDto<>(stockRepository.findBySearchKeyword(searchKeyword, pageable)
+                .map(StockSearchDto::new));
 
     }
 }
