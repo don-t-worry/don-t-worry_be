@@ -13,6 +13,7 @@ import kwangwoon.chambit.dontworry.domain.usermoney.domain.UserMoneyView;
 import kwangwoon.chambit.dontworry.domain.usermoney.dto.response.UserMoneyViewResponse;
 import kwangwoon.chambit.dontworry.domain.usertrade.domain.UserTradeHistory;
 import kwangwoon.chambit.dontworry.domain.usertrade.dto.response.UserTradeHistoryResponseDto;
+import kwangwoon.chambit.dontworry.global.common.dto.PageResponseDto;
 import kwangwoon.chambit.dontworry.global.security.oauth.dto.CustomOauth2ClientDto;
 import kwangwoon.chambit.dontworry.global.security.oauth.dto.Oauth2ClientDto;
 import org.springframework.data.domain.Page;
@@ -210,7 +211,7 @@ public class TestDataUtil {
                 .build();
     }
 
-    public static <T> Page<T> getPage(List<T> list, Pageable pr){
-        return new PageImpl<>(list,pr,list.size());
+    public static <T> PageResponseDto<T> getPage(List<T> list, Pageable pr){
+        return new PageResponseDto<>(new PageImpl<>(list,pr,list.size()));
     }
 }

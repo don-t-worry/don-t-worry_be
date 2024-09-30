@@ -10,6 +10,7 @@ import kwangwoon.chambit.dontworry.domain.usertrade.TestDataUtil;
 import kwangwoon.chambit.dontworry.domain.usertrade.domain.UserTradeHistory;
 import kwangwoon.chambit.dontworry.domain.usertrade.dto.response.UserTradeHistoryResponseDto;
 import kwangwoon.chambit.dontworry.domain.usertrade.repository.UserTradeHistoryRepository;
+import kwangwoon.chambit.dontworry.global.common.dto.PageResponseDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -67,7 +68,7 @@ class UserTradeHistoryServiceTest {
 
         Mockito.when(userTradeHistoryRepository.findByUsername(Mockito.any(),Mockito.any())).thenReturn(given);
 
-        Page<UserTradeHistoryResponseDto> then = userTradeHistoryService.getUserTradeHistory(pr,getAuthentication());
+        PageResponseDto<UserTradeHistoryResponseDto> then = userTradeHistoryService.getUserTradeHistory(pr,getAuthentication());
 
         Mockito.verify(userTradeHistoryRepository).findByUsername(Mockito.any(),Mockito.any());
 
@@ -77,7 +78,7 @@ class UserTradeHistoryServiceTest {
         }
 
         System.out.println("then");
-        for (UserTradeHistoryResponseDto userTradeHistoryResponseDto : then) {
+        for (UserTradeHistoryResponseDto userTradeHistoryResponseDto : then.getContent()) {
             System.out.println(userTradeHistoryResponseDto);
         }
 

@@ -1,6 +1,7 @@
 package kwangwoon.chambit.dontworry.domain.stock.service;
 
 import kwangwoon.chambit.dontworry.domain.stock.dto.response.StockSearchDto;
+import kwangwoon.chambit.dontworry.global.common.dto.PageResponseDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,8 @@ class StockServiceTest {
 
         PageRequest pr = PageRequest.of(0,10, Sort.by("stockName"));
 
-        Page<StockSearchDto> list = stockService.getSearchStock("삼성", pr);
+        PageResponseDto<StockSearchDto> list = stockService.getSearchStock("삼성", pr);
         System.out.println(list);
-        Assertions.assertThat(list.getSize()).isEqualTo(10);
+        Assertions.assertThat(list.getPageInfo().getSize()).isEqualTo(12);
     }
 }

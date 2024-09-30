@@ -2,6 +2,7 @@ package kwangwoon.chambit.dontworry.domain.usertrade.service;
 
 import kwangwoon.chambit.dontworry.domain.usertrade.dto.response.UserTradeHistoryResponseDto;
 import kwangwoon.chambit.dontworry.domain.usertrade.repository.UserTradeHistoryRepository;
+import kwangwoon.chambit.dontworry.global.common.dto.PageResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +17,8 @@ import java.util.List;
 public class UserTradeHistoryService {
     private final UserTradeHistoryRepository userTradeHistoryRepository;
 
-    public Page<UserTradeHistoryResponseDto> getUserTradeHistory(Pageable pageable,@AuthenticationPrincipal UserDetails user){
-        return userTradeHistoryRepository.findByUsername(user.getUsername(), pageable)
-                .map(UserTradeHistoryResponseDto::new);
+    public PageResponseDto<UserTradeHistoryResponseDto> getUserTradeHistory(Pageable pageable, @AuthenticationPrincipal UserDetails user){
+        return new PageResponseDto<>(userTradeHistoryRepository.findByUsername(user.getUsername(), pageable)
+                .map(UserTradeHistoryResponseDto::new));
     }
 }
