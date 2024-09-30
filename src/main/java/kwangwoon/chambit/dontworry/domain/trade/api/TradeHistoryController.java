@@ -23,7 +23,7 @@ public class TradeHistoryController {
     @GetMapping("/history")
     @Operation(summary = "서비스의 시세차익 거래 내역",description = "무한 스크롤을 위해 page입력받음")
     public ResponseEntity<?> getAllTradeHistory(@RequestParam("page") int page){
-        PageRequest pr = PageRequest.of(page,12, Sort.by("time"));
+        PageRequest pr = PageRequest.of(page-1,12, Sort.by("time"));
         return ResponseEntity.ok(tradeHistoryService.getAllTradeHistory(pr));
     }
 

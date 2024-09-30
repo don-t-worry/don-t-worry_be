@@ -22,7 +22,7 @@ public class StockController {
     @GetMapping("/search")
     @Operation(summary = "주식 검색 api", description = "12개 씩 출력함. 무한 스크롤을 위해 page입력 받음")
     public ResponseEntity<?> getStockSearchPage(@RequestParam("searchKeyword") String searchKeyword,@RequestParam("page") int page){
-        PageRequest pr = PageRequest.of(page,12, Sort.by("stockName"));
+        PageRequest pr = PageRequest.of(page-1,12, Sort.by("stockName"));
         return ResponseEntity.ok(stockService.getSearchStock(searchKeyword, pr));
     }
 

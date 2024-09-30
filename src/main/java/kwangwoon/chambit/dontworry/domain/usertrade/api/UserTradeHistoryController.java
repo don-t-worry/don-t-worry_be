@@ -25,7 +25,7 @@ public class UserTradeHistoryController {
     @GetMapping("/userhistory")
     @Operation(summary = "유저의 시세차익 거래내역", description = "무한 스크롤을 위한 page입력받음")
     public ResponseEntity<?> getUserTradeHistory(@RequestParam("page")int page, @AuthenticationPrincipal UserDetails user){
-        PageRequest pr = PageRequest.of(page,12, Sort.by("time"));
+        PageRequest pr = PageRequest.of(page-1,12, Sort.by("time"));
         return ResponseEntity.ok(userTradeHistoryService.getUserTradeHistory(pr,user));
     }
 }
