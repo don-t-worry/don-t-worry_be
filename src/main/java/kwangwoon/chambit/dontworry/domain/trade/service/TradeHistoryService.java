@@ -6,6 +6,7 @@ import kwangwoon.chambit.dontworry.domain.trade.domain.TradeHistory;
 import kwangwoon.chambit.dontworry.domain.trade.dto.response.TradeHomeDto;
 import kwangwoon.chambit.dontworry.domain.trade.dto.response.TradeHistoryResponseDto;
 import kwangwoon.chambit.dontworry.domain.trade.repository.TradeHistoryRepository;
+import kwangwoon.chambit.dontworry.global.common.dto.PageResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,9 +23,9 @@ public class TradeHistoryService {
     private final TradeHistoryRepository tradeHistoryRepository;
     private final ServiceMoneyViewRepository serviceMoneyViewRepository;
 
-    public Page<TradeHistoryResponseDto> getAllTradeHistory(Pageable pageable){
-        return tradeHistoryRepository.findByPage(pageable)
-                .map(TradeHistoryResponseDto::new);
+    public PageResponseDto<TradeHistoryResponseDto> getAllTradeHistory(Pageable pageable){
+        return new PageResponseDto<>(tradeHistoryRepository.findByPage(pageable)
+                .map(TradeHistoryResponseDto::new));
     }
 
     public TradeHomeDto getTradeHomeDto(){

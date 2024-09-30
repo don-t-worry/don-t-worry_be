@@ -15,6 +15,7 @@ import kwangwoon.chambit.dontworry.domain.usermoney.service.UserMoneyViewService
 import kwangwoon.chambit.dontworry.domain.usertrade.api.UserTradeHistoryController;
 import kwangwoon.chambit.dontworry.domain.usertrade.dto.response.UserTradeHistoryResponseDto;
 import kwangwoon.chambit.dontworry.domain.usertrade.service.UserTradeHistoryService;
+import kwangwoon.chambit.dontworry.global.common.dto.PageResponseDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +83,7 @@ public class TradeApiTest {
 
         User user = getUser();
 
-        Page<UserTradeHistoryResponseDto> page = getPage(getUserTradeHistory(user, tradeHistory), pr);
+        PageResponseDto<UserTradeHistoryResponseDto> page = getPage(getUserTradeHistory(user, tradeHistory), pr);
 
 
 
@@ -106,7 +107,7 @@ public class TradeApiTest {
         PageRequest pr = PageRequest.of(0,10, Sort.by("time").descending());
         List<Derivative> derivative = getDerivative();
         List<TradeHistory> tradeHistory = getTradeHistory(derivative);
-        Page<TradeHistoryResponseDto> page = getPage(getTradeHistoryResponseDto(tradeHistory), pr);
+        PageResponseDto<TradeHistoryResponseDto> page = getPage(getTradeHistoryResponseDto(tradeHistory), pr);
 
         when(tradeHistoryService.getAllTradeHistory(any())).thenReturn(page);
 
