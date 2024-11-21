@@ -6,6 +6,8 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -17,11 +19,11 @@ public class Stock {
 
     private String stockCode;
     private String stockName;
-    private Long volatility;
+    private BigDecimal volatility;
     private String imageUrl;
 
     @Builder
-    public Stock(String stockCode, String stockName, Long volatility, String imageUrl){
+    public Stock(String stockCode, String stockName, BigDecimal volatility, String imageUrl){
         this.stockCode = stockCode;
         this.stockName = stockName;
         this.volatility = volatility;
