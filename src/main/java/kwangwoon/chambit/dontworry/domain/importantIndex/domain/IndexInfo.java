@@ -1,5 +1,6 @@
 package kwangwoon.chambit.dontworry.domain.importantIndex.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kwangwoon.chambit.dontworry.domain.importantIndex.enums.ChangeStatus;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -13,6 +14,7 @@ import org.springframework.data.annotation.Id;
 public abstract class IndexInfo {
     @Id
     private String code;
+    @JsonIgnore
     private String symbolCode;
     private String name;
     private ChangeStatus change;

@@ -15,7 +15,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -73,8 +75,12 @@ public class PortfolioController {
 
     @DeleteMapping()
     @Operation(summary = "포트폴리오 삭제")
-    public ResponseEntity<?> deletePortfolio(@RequestBody PortfolioDeleteDto portfolioDeleteDto){
-        portfolioService.deletePortfolios(portfolioDeleteDto.getPortfolioIds());
+    public ResponseEntity<?> deletePortfolio(@RequestParam("deleteIds") String portfolioDeleteIds){
+        List<Long> portfolioIds = Arrays.stream(portfolioDeleteIds.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+
+        portfolioService.deletePortfolios(portfolioIds);
         return ResponseEntity.ok("success");
     }
 
