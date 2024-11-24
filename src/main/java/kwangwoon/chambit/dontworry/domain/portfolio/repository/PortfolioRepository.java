@@ -21,6 +21,10 @@ public interface PortfolioRepository extends JpaRepository<Portfolio,Long> {
     @Query("select p from Portfolio p join fetch p.user u left join fetch p.stock s where u.username=:username")
     List<Portfolio> findByStockAllPrices(@Param("username")String username);
 
+
+    @Query("select p from Portfolio p join fetch p.user u where u.username=:username")
+    List<Portfolio> findByUsername(@Param("username")String username);
+
     @Modifying
     @Query("delete from Portfolio p where p.id in :ids")
     void deleteByIds(@Param("ids") List<Long> ids);
