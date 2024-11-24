@@ -21,14 +21,14 @@ public class PageResponseDto<T> {
 
     @Data
     public static class PageInfo{
-        Integer page;
+        Integer currentPage;
         Integer size;
         Boolean hasNextPage;
         Long totalContents;
         Integer totalPages;
 
         public PageInfo(int page, int size, boolean hasNextPage, long totalContents, int totalPages){
-            this.page = page;
+            this.currentPage = page;
             this.size = size;
             this.hasNextPage = hasNextPage;
             this.totalContents = totalContents;

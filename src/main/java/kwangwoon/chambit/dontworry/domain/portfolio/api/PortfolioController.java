@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kwangwoon.chambit.dontworry.domain.portfolio.dto.request.PortfolioDeleteDto;
 import kwangwoon.chambit.dontworry.domain.portfolio.dto.request.PortfolioInsertDto;
 import kwangwoon.chambit.dontworry.domain.portfolio.dto.request.PortfolioUpdateDto;
+import kwangwoon.chambit.dontworry.domain.portfolio.dto.response.InsertUpdateResponseDto;
 import kwangwoon.chambit.dontworry.domain.portfolio.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -59,22 +62,26 @@ public class PortfolioController {
     @PostMapping()
     @Operation(summary = "포트폴리오 입력", description = "토큰 정보 필요함")
     public ResponseEntity<?> insertPortfolio(@RequestBody PortfolioInsertDto portfolioInsertDto, @AuthenticationPrincipal UserDetails userDetails){
-        portfolioService.insertPortfolio(portfolioInsertDto, userDetails);
-        return ResponseEntity.ok("success");
+        InsertUpdateResponseDto insertUpdateResponseDto = portfolioService.insertPortfolio(portfolioInsertDto, userDetails);
+        return ResponseEntity.ok(insertUpdateResponseDto);
     }
 
 
     @PutMapping("/{portfolioId}")
     @Operation(summary = "포트폴리오 수정")
     public ResponseEntity<?> modifyPortfolio(@PathVariable("portfolioId") Long id, @RequestBody PortfolioUpdateDto portfolioUpdateDto){
-        portfolioService.updatePortfolio(id, portfolioUpdateDto);
-        return ResponseEntity.ok("success");
+        InsertUpdateResponseDto insertUpdateResponseDto = portfolioService.updatePortfolio(id, portfolioUpdateDto);
+        return ResponseEntity.ok(insertUpdateResponseDto);
     }
 
     @DeleteMapping()
     @Operation(summary = "포트폴리오 삭제")
-    public ResponseEntity<?> deletePortfolio(@RequestBody PortfolioDeleteDto portfolioDeleteDto){
-        portfolioService.deletePortfolios(portfolioDeleteDto.getPortfolioIds());
+    public ResponseEntity<?> deletePortfolio(@RequestParam("deleteIds") String portfolioDeleteIds){
+        List<Long> portfolioIds = Arrays.stream(portfolioDeleteIds.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+
+        portfolioService.deletePortfolios(portfolioIds);
         return ResponseEntity.ok("success");
     }
 
