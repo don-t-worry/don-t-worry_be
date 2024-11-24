@@ -1,5 +1,6 @@
 package kwangwoon.chambit.dontworry.domain.portfolio.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import kwangwoon.chambit.dontworry.domain.portfolio.domain.Portfolio;
 import kwangwoon.chambit.dontworry.domain.portfolio.dto.request.PortfolioInsertDto;
 import kwangwoon.chambit.dontworry.domain.portfolio.dto.request.PortfolioUpdateDto;
@@ -8,6 +9,7 @@ import kwangwoon.chambit.dontworry.domain.portfolio.dto.response.dto.PortfolioEl
 import kwangwoon.chambit.dontworry.domain.portfolio.dto.response.dto.PortfolioPieDto;
 import kwangwoon.chambit.dontworry.domain.portfolio.dto.response.dto.PortfolioRecommendDerivativeDto;
 import kwangwoon.chambit.dontworry.domain.portfolio.repository.PortfolioRepository;
+import kwangwoon.chambit.dontworry.domain.recommendHedge.service.RecommendHedgeService;
 import kwangwoon.chambit.dontworry.domain.stock.domain.Stock;
 import kwangwoon.chambit.dontworry.domain.stock.repository.StockRepository;
 import kwangwoon.chambit.dontworry.domain.user.domain.User;
@@ -35,6 +37,8 @@ public class PortfolioService {
     private final UserRepository userRepository;
     private final StockRepository stockRepository;
 
+    private final RecommendHedgeService recommendHedgeService;
+
     // 추천 헷지상품 목록(2개랑, 모든 리스트)
     public Page<PortfolioRecommendDerivativeDto> getAllPortfolioRecommendDerivative(Pageable pageable, UserDetails principal){
         String username = principal.getUsername();
@@ -45,24 +49,28 @@ public class PortfolioService {
 
     public List<PortfolioRecommendDerivativeDto> getAllPortfolioRecommendDerivative(UserDetails principal){
         String username = principal.getUsername();
-        return portfolioRepository.findByUsernameAllDerivative(username)
-                .stream()
-                .map(PortfolioRecommendDerivativeDto::new)
-                .collect(Collectors.toList());
+        List<Portfolio> portfolios = portfolioRepository.findByUsername(username);
+
+        try {
+            return recommendHedgeService.getAllRecommendDerivative(portfolios);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
 
     public HedgeHomeResponseDto getHedgeHome(UserDetails principal){
         String username = principal.getUsername();
+        List<Portfolio> portfolios = portfolioRepository.findByStockAllPrices(username);
 
-        PageRequest pageRequest = PageRequest.of(0,2, Sort.by("stockQuantity").descending());
-
-        List<PortfolioRecommendDerivativeDto> hedgeRecommend2 = getPortfolioRecommendDerivative2(username, pageRequest);
-        List<PortfolioPieDto> pieChart = getPortfolioPie(username);
-        String name = userRepository.findByUsername(username).get().getName();
-
-        return new HedgeHomeResponseDto(pieChart,hedgeRecommend2);
+        try {
+            List<PortfolioRecommendDerivativeDto> hedgeRecommend2 = recommendHedgeService.getTwoRecommendDerivative(portfolios);
+            List<PortfolioPieDto> pieChart = getPortfolioPie(portfolios);
+            return new HedgeHomeResponseDto(pieChart,hedgeRecommend2);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public PortfolioManageResponseDto getPortfolioManage(UserDetails principal){
@@ -188,8 +196,8 @@ public class PortfolioService {
     }
 
     // 파이차트
-    private List<PortfolioPieDto> getPortfolioPie(String username) {
-        List<Portfolio> stockAllPrices = portfolioRepository.findByStockAllPrices(username);
+    private List<PortfolioPieDto> getPortfolioPie(List<Portfolio> stockAllPrices) {
+//        List<Portfolio> stockAllPrices = portfolioRepository.findByStockAllPrices(username);
 
 
         List<PortfolioElementDto> presentPortfolio = getPresentPortfolio(stockAllPrices);

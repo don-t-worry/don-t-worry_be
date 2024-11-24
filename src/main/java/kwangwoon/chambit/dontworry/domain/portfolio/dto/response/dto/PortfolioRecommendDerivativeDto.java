@@ -22,4 +22,13 @@ public class PortfolioRecommendDerivativeDto {
         this.riskReductionRate = portfolio.getRiskReductionRate();
         this.stockImageUrl = portfolio.getStock().getImageUrl();
     }
+
+    public PortfolioRecommendDerivativeDto(Object[] hedge, Long derivativeQuantity){
+        this.riskReductionRate = (long) hedge[2];
+        this.derivativeName = (String) hedge[3];
+        this.derivativeCode = (String) hedge[4];
+        this.stockName = (String) hedge[5];
+        this.stockImageUrl = (String) hedge[6];
+        this.derivativeQuantity = derivativeQuantity;
+    }
 }
