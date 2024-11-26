@@ -12,12 +12,16 @@ public class UserSignUpDto {
     private String name;
     private String username;
     private HedgeType hedgeType;
+    private String token;
+    private String deviceId;
 
     @Builder
-    public UserSignUpDto(String name, String username, HedgeType hedgeType){
+    public UserSignUpDto(String name, String username, HedgeType hedgeType, String token, String deviceId){
         this.name = name;
         this.username = username;
         this.hedgeType = hedgeType;
+        this.token = token;
+        this.deviceId = deviceId;
     }
 
     public User toUser(){
