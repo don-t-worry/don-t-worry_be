@@ -4,6 +4,7 @@ import kwangwoon.chambit.dontworry.domain.alarm.domain.Alarm;
 import kwangwoon.chambit.dontworry.domain.alarm.enums.AlarmStatus;
 import kwangwoon.chambit.dontworry.domain.alarm.enums.AlarmType;
 import kwangwoon.chambit.dontworry.domain.alarm.repository.AlarmRepository;
+import kwangwoon.chambit.dontworry.domain.deviceToken.service.DeviceTokenService;
 import kwangwoon.chambit.dontworry.domain.user.domain.User;
 import kwangwoon.chambit.dontworry.domain.user.dto.request.UserSignUpDto;
 import kwangwoon.chambit.dontworry.domain.user.dto.request.UsernameExistDto;
@@ -37,12 +38,16 @@ public class UserService {
 
     private final AlarmRepository alarmRepository;
 
+    private final DeviceTokenService deviceTokenService;
+
     @Transactional
     public User signUp(UserSignUpDto userSignUpDto){
         User user = userSignUpDto.toUser();
         User savedUser = userRepository.save(user);
 
         saveAlarm(savedUser);
+
+        deviceTokenService.saveToken(savedUser,userSignUpDto.getToken(), userSignUpDto.getDeviceId());
 
         return savedUser;
     }
@@ -67,6 +72,9 @@ public class UserService {
             return new UsernameNotExistResponseDto(usernameExistDto.getUsername());
         }else{
             User user = optionalUser.get();
+
+            deviceTokenService.updateToken(user, usernameExistDto.getToken(), usernameExistDto.getDeviceId());
+
             TokenDto token = jwtUtil.createToken(user.getUsername(), user.getRole());
             return new UsernameExistResponseDto(user.getName(), token.getAccessToken());
         }

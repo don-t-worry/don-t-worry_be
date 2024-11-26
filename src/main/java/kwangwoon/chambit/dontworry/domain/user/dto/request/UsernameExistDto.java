@@ -7,4 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UsernameExistDto {
     private String username;
+    private String token;
+    private String deviceId;
 }
