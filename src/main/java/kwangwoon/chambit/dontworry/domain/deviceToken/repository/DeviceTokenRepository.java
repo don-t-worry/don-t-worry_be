@@ -11,15 +11,23 @@ import java.util.Optional;
 
 public interface DeviceTokenRepository extends JpaRepository<DeviceToken, Long> {
     //시세차익 알람 on
-    @Query("select d from User u join fetch Alarm a join fetch DeviceToken d " +
+//    @Query("select d from User u join fetch Alarm a join fetch DeviceToken d " +
+//            "where a.alarmType = kwangwoon.chambit.dontworry.domain.alarm.enums.AlarmType.ARBITRAGE " +
+//            "and a.alarmStatus = kwangwoon.chambit.dontworry.domain.alarm.enums.AlarmStatus.ON")
+//    List<DeviceToken> findDeviceTokenArbitrageOn();
+    @Query("select d from DeviceToken d join fetch d.user u " +
+            "where u.id in " +
+            "(select a.user.id from Alarm a " +
             "where a.alarmType = kwangwoon.chambit.dontworry.domain.alarm.enums.AlarmType.ARBITRAGE " +
-            "and a.alarmStatus = kwangwoon.chambit.dontworry.domain.alarm.enums.AlarmStatus.ON")
+            "and a.alarmStatus = kwangwoon.chambit.dontworry.domain.alarm.enums.AlarmStatus.ON)")
     List<DeviceToken> findDeviceTokenArbitrageOn();
 
     //파생상품 마감 알람 on
-    @Query("select d from User u join fetch Alarm a join fetch DeviceToken d " +
+    @Query("select d from DeviceToken d join fetch d.user u " +
+            "where u.id in " +
+            "(select a.user.id from Alarm a " +
             "where a.alarmType = kwangwoon.chambit.dontworry.domain.alarm.enums.AlarmType.EXPIRE " +
-            "and a.alarmStatus = kwangwoon.chambit.dontworry.domain.alarm.enums.AlarmStatus.ON")
+            "and a.alarmStatus = kwangwoon.chambit.dontworry.domain.alarm.enums.AlarmStatus.ON)")
     List<DeviceToken> findDeviceTokenExpireOn();
 
     @Query("select d from DeviceToken d where d.user=:user and d.deviceId=:deviceId")
