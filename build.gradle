@@ -14,13 +14,12 @@ java {
 }
 
 task copyPrivate(type: Copy) {
-	from './submodule_backend'
-	include '*.yml'
-	into 'src/main/resources'
-
-	from './submodule_backend'
-	include '*.json'
-	into 'src/main/resources'
+	copy{
+		from './submodule_backend'
+		include '*'
+		exclude '*.md'
+		into 'src/main/resources'
+	}
 }
 
 

@@ -65,6 +65,7 @@ public class UserService {
         alarmRepository.save(alarm2);
     }
 
+    @Transactional
     public UsernameResponseDto existUsername(UsernameExistDto usernameExistDto){
         Optional<User> optionalUser = userRepository.findByUsername(usernameExistDto.getUsername());
 
