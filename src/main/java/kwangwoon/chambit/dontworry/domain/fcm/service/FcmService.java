@@ -4,26 +4,35 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.messaging.*;
 import kwangwoon.chambit.dontworry.domain.fcm.dto.FcmMessage;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class FcmService {
-    private final String API_URL = "https://fcm.googleapis.com/v1/projects/" +
-            "don-t-worry-5cf12/messages:send";
+    private final String API_URL;
     private final ObjectMapper objectMapper;
+
+    public FcmService(@Value("${fcm.apiurl}") String API_URL, ObjectMapper objectMapper){
+        this.API_URL = API_URL;
+        this.objectMapper = objectMapper;
+    }
 
     public void sendMessageTo(String targetToken, String title, String body) throws IOException {
         String message = makeMessage(targetToken, title, body);
+        request(message);
+    }
 
+    private void request(String message) throws IOException {
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(message,
                 MediaType.get("application/json; charset=utf-8"));
