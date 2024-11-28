@@ -36,6 +36,8 @@ public class DeviceTokenController {
     public ResponseEntity<?> sendArbitrageToken(HttpServletRequest request) throws IOException {
 
         String clientIP = request.getRemoteAddr();
+        System.out.println(clientIP);
+        System.out.println(request.getHeader("X-Forwarded-For"));
 
         if(!clientIP.equals(arbitrageServerIp)){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied");

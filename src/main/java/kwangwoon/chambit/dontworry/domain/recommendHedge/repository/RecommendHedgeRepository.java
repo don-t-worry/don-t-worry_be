@@ -13,7 +13,7 @@ public interface RecommendHedgeRepository extends JpaRepository<RecommendHedge, 
     @Query("select r from RecommendHedge r where r.stock.id=:stockId and r.hedgeType=:hedgeType")
     Optional<RecommendHedge> findByStockIdAndHedgeType(@Param("stockId") Long stockId, @Param("hedgeType")HedgeType hedgeType);
 
-    @Query(value = "SELECT r.stock_id, r.hedge_type, r.risk_reduction_rate, d.derivative_name, d.derivative_code, s.stock_name, s.image_url " +
+    @Query(value = "SELECT r.stock_id, r.hedge_type, r.risk_reduction_rate, d.derivative_name, d.derivative_code, s.stock_name, s.image_url, r.quantity " +
             "FROM recommend_hedge r " +
             "JOIN stock s ON r.stock_id = s.stock_id " +
             "JOIN derivative d ON r.derivative_id = d.derivative_id " +

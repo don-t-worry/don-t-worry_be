@@ -31,14 +31,13 @@ public class RecommendHedgeService {
 
     private List<PortfolioRecommendDerivativeDto> getRecommendDerivative(List<Portfolio> portfolios, int maxValue) throws JsonProcessingException {
         Map<String, Long> quantities = new HashMap<>();
-        List<Map<String, Object>> pairs = getPairs(portfolios, quantities, maxValue);
-        return getPortfolioRecommendDerivativeDtos(pairs, quantities);
+        List<Map<String, Object>> pairs = getPairs(portfolios, quantities);
+        return getPortfolioRecommendDerivativeDtos(pairs, quantities, maxValue);
     }
 
-    private List<Map<String, Object>> getPairs(List<Portfolio> portfolios, Map<String, Long> quantities, int limit) {
+    private List<Map<String, Object>> getPairs(List<Portfolio> portfolios, Map<String, Long> quantities) {
         List<Map<String, Object>> pairs = portfolios.stream()
                 .sorted((p1,p2) -> Long.compare(p2.getStockQuantity(), p1.getStockQuantity()))
-                .limit(limit)
                 .map(portfolio -> {
                     Object stockId = portfolio.getStock() != null ? portfolio.getStock().getId() : null;
                     Object hedgeType = portfolio.getUser() != null ? portfolio.getUser().getHedgeType().name() : null;
@@ -51,20 +50,19 @@ public class RecommendHedgeService {
         return pairs;
     }
 
-    private List<PortfolioRecommendDerivativeDto> getPortfolioRecommendDerivativeDtos(List<Map<String, Object>> pairs, Map<String, Long> quantities) throws JsonProcessingException {
+    private List<PortfolioRecommendDerivativeDto> getPortfolioRecommendDerivativeDtos(List<Map<String, Object>> pairs, Map<String, Long> quantities, int limit) throws JsonProcessingException {
         String jsonPairs = new ObjectMapper().writeValueAsString(pairs);
         List<Object[]> recommendHedges = recommendHedgeRepository.findByStockIdAndHedgeTypeIn(jsonPairs);
         List<PortfolioRecommendDerivativeDto> result = new ArrayList<>();
         for(var hedge : recommendHedges){
             String quantityKey = String.valueOf(hedge[0]) + String.valueOf(hedge[1]);
-            Long quantity = quantities.get(quantityKey);
-
-            PortfolioRecommendDerivativeDto dto = new PortfolioRecommendDerivativeDto(hedge, quantity);
+            Long stockQuantity = quantities.get(quantityKey);
+            PortfolioRecommendDerivativeDto dto = new PortfolioRecommendDerivativeDto(hedge, stockQuantity);
 
             result.add(dto);
         }
 
-        return result;
+        return result.stream().limit(limit).collect(Collectors.toList());
     }
 
 }

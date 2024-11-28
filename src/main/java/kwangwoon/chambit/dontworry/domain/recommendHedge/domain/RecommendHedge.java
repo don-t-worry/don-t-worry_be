@@ -22,7 +22,8 @@ public class RecommendHedge {
 
     @Enumerated(EnumType.STRING)
     private HedgeType hedgeType;
-    private Long riskReductionRate;
+    private Double riskReductionRate;
+    private Long quantity;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "stock_id")
