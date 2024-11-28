@@ -35,10 +35,7 @@ public class DeviceTokenController {
     @Operation(summary = "시세차익 토큰 보내는 api", description = "시세차익 서버에서만 작동")
     public ResponseEntity<?> sendArbitrageToken(HttpServletRequest request) throws IOException {
 
-        String clientIP = request.getRemoteAddr();
-        System.out.println(clientIP);
-        System.out.println(request.getHeader("X-Forwarded-For"));
-
+        String clientIP = request.getHeader("X-Forwarded-For");
         if(!clientIP.equals(arbitrageServerIp)){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied");
         }
