@@ -206,29 +206,36 @@ public class PortfolioService {
                 .mapToLong(Long::longValue)
                 .sum();
 
-        return presentPortfolio.stream()
+        List<PortfolioPieDto> result = presentPortfolio.stream()
                 .map(x -> {
                     long amount = x.getPresentPrice() * x.getStockQuantity();
                     float rate = (float) amount / sum;
-
-                    if(rate < 0.01){
-                        return new PortfolioPieDto("기타",rate);
-                    }else{
-                        return new PortfolioPieDto(x.getStockName(),rate);
-                    }
+                    return new PortfolioPieDto(x.getStockName(), rate);
                 })
-                .collect(Collectors.groupingBy(
-                        PortfolioPieDto::getStockName,
-                        Collectors.reducing(
-                                (a, b) -> new PortfolioPieDto(a.getStockName(), a.getRate() + b.getRate())
-                        )
-                ))
-                .entrySet().stream()
-                .map(entry -> entry.getValue()
-                        .map(dto -> new PortfolioPieDto(entry.getKey(), dto.getRate()))
-                        .orElse(new PortfolioPieDto(entry.getKey(), 0f)))
                 .sorted((a, b) -> Float.compare(b.getRate(), a.getRate()))
-                .collect(Collectors.toList());
+                .toList();
+
+        // 상위 6개 추출
+        List<PortfolioPieDto> top6 = result.stream()
+                .limit(6) // 상위 6개 추출
+                .toList();
+
+        // 나머지 데이터를 "기타"로 합치기
+        float otherRate = result.stream()
+                .skip(6) // 7번째부터 나머지 데이터
+                .map(PortfolioPieDto::getRate) // 모든 rate 합산
+                .reduce(0f, Float::sum); // 합계를 구함
+
+        PortfolioPieDto others = new PortfolioPieDto("기타", otherRate);
+
+        // 최종 리스트 만들기 (상위 6개 + 기타)
+        List<PortfolioPieDto> finalResult = new ArrayList<>();
+        finalResult.addAll(top6);
+        if (otherRate > 0) { // 기타 데이터가 존재할 경우 추가
+            finalResult.add(others);
+        }
+
+        return finalResult;
     }
 
     private List<PortfolioEditResponseDto> getEditPortfolio(List<Portfolio> portfolios){

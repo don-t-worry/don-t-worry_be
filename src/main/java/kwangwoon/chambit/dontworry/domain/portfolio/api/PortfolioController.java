@@ -76,14 +76,21 @@ public class PortfolioController {
 
     @DeleteMapping()
     @Operation(summary = "포트폴리오 삭제")
-    public ResponseEntity<?> deletePortfolio(@RequestParam("deleteIds") String portfolioDeleteIds){
-        List<Long> portfolioIds = Arrays.stream(portfolioDeleteIds.split(","))
-                .map(Long::parseLong)
-                .collect(Collectors.toList());
-
-        portfolioService.deletePortfolios(portfolioIds);
+    public ResponseEntity<?> deletePortfolio(@RequestBody PortfolioDeleteDto portfolioDeleteDto){
+        portfolioService.deletePortfolios(portfolioDeleteDto.getPortfolioIds());
         return ResponseEntity.ok("success");
     }
+
+//    @DeleteMapping()
+//    @Operation(summary = "포트폴리오 삭제")
+//    public ResponseEntity<?> deletePortfolio(@RequestParam("deleteIds") String portfolioDeleteIds){
+//        List<Long> portfolioIds = Arrays.stream(portfolioDeleteIds.split(","))
+//                .map(Long::parseLong)
+//                .collect(Collectors.toList());
+//
+//        portfolioService.deletePortfolios(portfolioIds);
+//        return ResponseEntity.ok("success");
+//    }
 
 
 
