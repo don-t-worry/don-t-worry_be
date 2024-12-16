@@ -29,14 +29,9 @@ public class TradeHistoryService {
     }
 
     public TradeHomeDto getTradeHomeDto(){
-        PageRequest pr = PageRequest.of(0,3, Sort.by("time").descending());
-        List<TradeHistoryResponseDto> tradeHistories = tradeHistoryRepository.findByPage(pr)
-                .stream()
-                .map(TradeHistoryResponseDto::new)
-                .collect(Collectors.toList());
         ServiceMoneyView serviceMoney = serviceMoneyViewRepository.findServiceMoney();
 
-        return TradeHomeDto.builder().serviceMoneyView(serviceMoney).serviceTradeHistory(tradeHistories).build();
+        return TradeHomeDto.builder().serviceMoneyView(serviceMoney).build();
     }
 
 }

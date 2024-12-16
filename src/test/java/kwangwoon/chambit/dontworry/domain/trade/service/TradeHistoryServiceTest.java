@@ -76,7 +76,7 @@ class TradeHistoryServiceTest {
         Mockito.verify(tradeHistoryRepository).findByPage(pr);
         Mockito.verify(serviceMoneyViewRepository).findServiceMoney();
 
-        TradeHomeDto build = TradeHomeDto.builder().serviceTradeHistory(result.stream().map(TradeHistoryResponseDto::new).collect(Collectors.toList())).serviceMoneyView(serviceMoneyView).build();
+        TradeHomeDto build = TradeHomeDto.builder().serviceMoneyView(serviceMoneyView).build();
 
         Assertions.assertThat(build).isEqualTo(tradeHomeDto);
 
