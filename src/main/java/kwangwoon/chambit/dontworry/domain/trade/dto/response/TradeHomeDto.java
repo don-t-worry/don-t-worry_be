@@ -1,5 +1,6 @@
 package kwangwoon.chambit.dontworry.domain.trade.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kwangwoon.chambit.dontworry.domain.servicemoney.domain.ServiceMoneyView;
 import lombok.Builder;
 import lombok.Data;
@@ -10,12 +11,10 @@ import java.util.List;
 public class TradeHomeDto {
     Long serviceTotalBalance;
     Double profitRate;
-    List<TradeHistoryResponseDto> serviceTradeHistory;
 
     @Builder
-    public TradeHomeDto(ServiceMoneyView serviceMoneyView, List<TradeHistoryResponseDto> serviceTradeHistory){
+    public TradeHomeDto(ServiceMoneyView serviceMoneyView){
         this.serviceTotalBalance = serviceMoneyView.getInvestmentBalance();
         this.profitRate = serviceMoneyView.getProfitRate();
-        this.serviceTradeHistory = serviceTradeHistory;
     }
 }
