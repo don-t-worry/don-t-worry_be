@@ -28,7 +28,7 @@ public class PageResponseDto<T> {
         Integer totalPages;
 
         public PageInfo(int page, int size, boolean hasNextPage, long totalContents, int totalPages){
-            this.currentPage = page;
+            this.currentPage = page+1;
             this.size = size;
             this.hasNextPage = hasNextPage;
             this.totalContents = totalContents;
