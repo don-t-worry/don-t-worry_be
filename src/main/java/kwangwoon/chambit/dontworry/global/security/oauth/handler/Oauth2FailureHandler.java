@@ -11,11 +11,17 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 import static kwangwoon.chambit.dontworry.global.config.DomainConfig.FrontServer;
+import static kwangwoon.chambit.dontworry.global.config.DomainConfig.LocalHttp;
 
 @Component
 public class Oauth2FailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        response.sendRedirect(FrontServer.getPresentAddress());
+        if(request.getServerName().equals("localhost")){
+            response.sendRedirect(LocalHttp.getAddress());
+        }
+        else{
+            response.sendRedirect(FrontServer.getAddress());
+        }
     }
 }
