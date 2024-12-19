@@ -45,6 +45,8 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String username = oauth2Client.getUsername();
 
         response.setStatus(201);
+        System.out.println("server name " + request.getServerName());
+        System.out.println("request url " + request.getRequestURL());
         if(request.getServerName().equals("localhost")){
             response.sendRedirect(LocalHttp.getAddress() + "sign-in?username="+username);
         }
