@@ -19,13 +19,14 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import static kwangwoon.chambit.dontworry.global.config.DomainConfig.FrontServer;
-import static kwangwoon.chambit.dontworry.global.config.DomainConfig.LocalHttp;
+import static kwangwoon.chambit.dontworry.global.config.DomainConfig.*;
 
 @Component
 @RequiredArgsConstructor
@@ -45,13 +46,29 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String username = oauth2Client.getUsername();
 
         response.setStatus(201);
-        System.out.println("server name " + request.getServerName());
-        System.out.println("request url " + request.getRequestURL());
-        if(request.getServerName().equals("localhost")){
-            response.sendRedirect(LocalHttp.getAddress() + "sign-in?username="+username);
+        String referer = request.getHeader("Referer"); // Referer 헤더 값 가져오기
+        String refererHost = "";
+        if (referer != null) {
+            try {
+                // URL에서 호스트와 포트만 추출
+                URL refererUrl = new URL(referer);
+                refererHost = refererUrl.getProtocol() + "://" + refererUrl.getHost() + "/";
+                if (refererUrl.getPort() != -1) {
+                    refererHost += ":" + refererUrl.getPort(); // 포트가 존재하면 추가
+                }
+            } catch (MalformedURLException e) {
+                System.err.println("Invalid Referer URL: " + referer);
+            }
         }
-        else{
+
+        System.out.println("Processed Referer: " + refererHost);
+
+        if(refererHost.isEmpty() || refererHost.equals(LocalHttp.getAddress())){
+            response.sendRedirect(LocalHttp.getAddress() + "sign-in?username="+username);
+        } else if(refererHost.equals(FrontServer.getAddress())){
             response.sendRedirect(FrontServer.getAddress() + "sign-in?username="+username);
+        } else{
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unknown state");
         }
     }
 }
