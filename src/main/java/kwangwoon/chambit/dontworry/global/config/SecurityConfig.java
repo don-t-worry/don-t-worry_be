@@ -22,7 +22,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import java.util.Collections;
 import java.util.List;
 
-import static kwangwoon.chambit.dontworry.global.config.DomainConfig.FrontServer;
+import static kwangwoon.chambit.dontworry.global.config.DomainConfig.*;
 
 @Configuration
 @EnableWebSecurity
@@ -67,7 +67,12 @@ public class SecurityConfig {
                 SecurityContextHolder.clearContext();
             });
             logout.logoutSuccessHandler((request, response, authentication) ->{
-                response.sendRedirect(FrontServer.getPresentAddress());
+                if(request.getServerName().equals("localhost")){
+                    response.sendRedirect(LocalHttp.getAddress());
+                }
+                else{
+                    response.sendRedirect(FrontServer.getAddress());
+                }
             });
         });
 
@@ -89,7 +94,7 @@ public class SecurityConfig {
 
                     CorsConfiguration configuration = new CorsConfiguration();
 
-                    configuration.setAllowedOrigins(List.of(FrontServer.getPresentAddress()));
+                    configuration.setAllowedOrigins(List.of(FrontServer.getAddress(), BackServer.getAddress(), LocalHttp.getAddress()));
                     configuration.setAllowedMethods(Collections.singletonList("*")); // 모든 요청 허용
                     configuration.setAllowCredentials(true);
                     configuration.setAllowedHeaders(Collections.singletonList("*"));

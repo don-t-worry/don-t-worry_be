@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static kwangwoon.chambit.dontworry.global.config.DomainConfig.FrontServer;
+import static kwangwoon.chambit.dontworry.global.config.DomainConfig.*;
 
 @Configuration
 public class CorsMvcConfig implements WebMvcConfigurer { // 모든 요청이 컨트롤러에 도달하기 전에 적용됩니다
@@ -12,6 +12,6 @@ public class CorsMvcConfig implements WebMvcConfigurer { // 모든 요청이 컨
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .exposedHeaders("Authorization")
-                .allowedOrigins(FrontServer.getPresentAddress());
+                .allowedOrigins(FrontServer.getAddress(), BackServer.getAddress(), LocalHttp.getAddress());
     }
 }

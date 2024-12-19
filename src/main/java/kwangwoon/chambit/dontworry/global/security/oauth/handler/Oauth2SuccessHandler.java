@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import static kwangwoon.chambit.dontworry.global.config.DomainConfig.FrontServer;
+import static kwangwoon.chambit.dontworry.global.config.DomainConfig.LocalHttp;
 
 @Component
 @RequiredArgsConstructor
@@ -44,46 +45,11 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String username = oauth2Client.getUsername();
 
         response.setStatus(201);
-        response.sendRedirect(FrontServer.getPresentAddress() + "sign-in?username="+username);
-
-
-
-//        Map<String,String> body = new HashMap<>();
-//        ObjectMapper objectMapper = new ObjectMapper();
-
-
-
-//        response.setStatus(200);
-//        response.sendRedirect(FrontServer.getPresentAddress() + "/hedge/home");
-//
-//        if(oauth2Client.isExist()){
-//            TokenDto token = jwtUtil.createToken(username, role);
-//            response.addHeader(HttpHeaders.AUTHORIZATION, token.getAccessToken());
-//
-//            User user = userRepository.findByUsername(username).get();
-//
-//            body.put("name",user.getName());
-//            String jsonBody = objectMapper.writeValueAsString(body);
-//
-//            response.setContentType("application/json");
-//            response.setCharacterEncoding("UTF-8");
-//
-//            PrintWriter writer = response.getWriter();
-//            writer.write(jsonBody);
-//
-//            response.setStatus(200);
-//            response.sendRedirect(FrontServer.getPresentAddress() + "/hedge/home");
-//        }else{
-//            body.put("username",username);
-//            String jsonBody = objectMapper.writeValueAsString(body);
-//
-//            response.setContentType("application/json");
-//            response.setCharacterEncoding("UTF-8");
-//            PrintWriter writer = response.getWriter();
-//            writer.write(jsonBody);
-//
-//            response.setStatus(201);
-//            response.sendRedirect(FrontServer.getPresentAddress() + "/signup/name?username="+username);
-//        }
+        if(request.getServerName().equals("localhost")){
+            response.sendRedirect(LocalHttp.getAddress() + "sign-in?username="+username);
+        }
+        else{
+            response.sendRedirect(FrontServer.getAddress() + "sign-in?username="+username);
+        }
     }
 }
