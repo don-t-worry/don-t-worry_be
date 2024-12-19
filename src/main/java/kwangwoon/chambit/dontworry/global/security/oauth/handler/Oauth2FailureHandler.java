@@ -26,10 +26,11 @@ public class Oauth2FailureHandler implements AuthenticationFailureHandler {
             try {
                 // URL에서 호스트와 포트만 추출
                 URL refererUrl = new URL(referer);
-                refererHost = refererUrl.getProtocol() + "://" + refererUrl.getHost() + "/";
+                refererHost = refererUrl.getProtocol() + "://" + refererUrl.getHost();
                 if (refererUrl.getPort() != -1) {
                     refererHost += ":" + refererUrl.getPort(); // 포트가 존재하면 추가
                 }
+                refererHost += "/";
             } catch (MalformedURLException e) {
                 System.err.println("Invalid Referer URL: " + referer);
             }
